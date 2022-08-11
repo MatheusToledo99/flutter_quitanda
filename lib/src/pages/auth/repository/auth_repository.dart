@@ -1,12 +1,18 @@
+// ignore_for_file: avoid_print, library_prefixes
+
 import 'package:quitanda/src/constants/endpoints.dart';
 import 'package:quitanda/src/models/user_model.dart';
+import 'package:quitanda/src/pages/auth/repository/auth_errors.dart'
+    as authErrors;
+import 'package:quitanda/src/pages/auth/result/auth_result.dart';
 import 'package:quitanda/src/services/http_manager.dart';
 
 class AuthRepository {
   //
   final HttpManager _httpManager = HttpManager();
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<AuthResult> signIn(
+      {required String email, required String password}) async {
     //
     final result = await _httpManager.restRequest(
       url: Endpoints.signin,
@@ -18,10 +24,10 @@ class AuthRepository {
     );
 
     if (result['result'] != null) {
-      final resultadoLogin = UserModel.fromJson(result['result']);
-      print(resultadoLogin.toString());
+      final UserModel objResultadoLogin = UserModel.fromJson(result['result']);
+      return AuthResult.success(objResultadoLogin);
     } else {
-      print('SignIn não Funcionou');
+      return AuthResult.error(authErrors.authErrorsString(result['error']));
     }
   }
 }

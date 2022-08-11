@@ -5,10 +5,13 @@ part 'user_model.g.dart';
 
 @JsonSerializable()
 class UserModel {
+  @JsonKey(
+      name:
+          'fullname') // converter o o nome do atrbuto name para fullnameno back-end.
+  String? name;
   String? id;
   String? token;
   String? email;
-  String? name;
   String? phone;
   String? cpf;
   String? password;
