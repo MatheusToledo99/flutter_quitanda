@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
+import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({Key? key}) : super(key: key);
+
+  final _formKey = GlobalKey<FormState>();
 
   final cpfFormatter = MaskTextInputFormatter(
     mask: '###.###.###-##',
@@ -14,6 +18,12 @@ class SignUpScreen extends StatelessWidget {
     mask: '(##) # ####-####',
     filter: {'#': RegExp(r'[0-9]')},
   );
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final cpfController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,49 +63,84 @@ class SignUpScreen extends StatelessWidget {
                         top: Radius.circular(30.0),
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // entrada de texto para email
-                        const CustomTextField(
-                            label: 'Email', icon: Icons.email),
-
-                        //entrada de texto para senha
-                        const CustomTextField(
-                            label: 'Senha', icon: Icons.lock, isPassword: true),
-
-                        //entrada de texto para nome
-                        const CustomTextField(
-                            label: 'Nome', icon: Icons.person),
-
-                        //entrada de texto para celular
-                        CustomTextField(
-                            label: 'Celular',
-                            icon: Icons.phone,
-                            inputFormatters: [phoneFormatter]),
-
-                        //entrada de texto para CPF
-                        CustomTextField(
-                            label: 'CPF',
-                            icon: Icons.file_copy,
-                            inputFormatters: [cpfFormatter]),
-
-                        //Botao de Criar Conta
-                        SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 10,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: const Text('Cadastrar Usuário',
-                                style: TextStyle(fontSize: 18.0)),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // entrada de texto para email
+                          CustomTextField(
+                            label: 'Email',
+                            icon: Icons.email,
+                            controller: emailController,
                           ),
-                        ),
-                      ],
+
+                          //entrada de texto para senha
+                          CustomTextField(
+                            controller: passwordController,
+                            label: 'Senha',
+                            icon: Icons.lock,
+                            isPassword: true,
+                          ),
+
+                          //entrada de texto para nome
+                          CustomTextField(
+                            controller: nameController,
+                            label: 'Nome',
+                            icon: Icons.person,
+                          ),
+
+                          //entrada de texto para celular
+                          CustomTextField(
+                              controller: phoneController,
+                              label: 'Celular',
+                              icon: Icons.phone,
+                              inputFormatters: [phoneFormatter]),
+
+                          //entrada de texto para CPF
+                          CustomTextField(
+                              controller: cpfController,
+                              label: 'CPF',
+                              icon: Icons.file_copy,
+                              inputFormatters: [cpfFormatter]),
+
+                          //Botao de Criar Conta
+                          SizedBox(
+                            height: 50,
+                            child: GetX<AuthController>(
+                              builder: (authController) {
+                                return ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      String email = emailController.text;
+                                      String password = passwordController.text;
+                                      String name = nameController.text;
+                                      String phone = phoneController.text;
+                                      String cpf = cpfController.text;
+
+                                      authController.signUpController(
+                                        email: email,
+                                        name: name,
+                                        phone: phone,
+                                        cpf: cpf,
+                                        password: password,
+                                      );
+                                    }
+                                  },
+                                  child: const Text('Cadastrar Usuário',
+                                      style: TextStyle(fontSize: 18.0)),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -154,10 +154,10 @@ class SignInScreen extends StatelessWidget {
                                         String password =
                                             passwordController.text;
 
-                                        authController.signIn(
+                                        authController.signInController(
                                             email: email, password: password);
 
-                                        Get.offNamed(PagesRoutes.baseRoute);
+                                        //Get.offNamed(PagesRoutes.baseRoute);
                                         //
                                       }
                                     },

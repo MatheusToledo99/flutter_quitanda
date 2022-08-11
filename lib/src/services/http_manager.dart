@@ -17,6 +17,8 @@ class HttpManager {
   }) async {
     //
     //Headers da requisição
+    //Caso não seja enviado nenhum header para o back end, esse receberá
+    //vazio, caso contrário atribui esses demais chaves e valores de acesso.
     final defaultHeaders = headers?.cast<String, String>() ?? {}
       ..addAll({
         'content-type': 'application/json',
