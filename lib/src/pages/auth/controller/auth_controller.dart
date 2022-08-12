@@ -14,11 +14,19 @@ class AuthController extends GetxController {
   final utilsServices = UtilsServices();
   UserModel user = UserModel();
 
+  // Future<void> validateTokenController(String token) async {
+  //   AuthResult result = await authRepository.validateToken(token);
+
+  //   result.when(success: (user) {
+  //     utilsServices.showToast(message: 'Token validado');
+  //     Get.offAllNamed(PagesRoutes.baseRoute);
+  //   }, error: (message) {
+  //     utilsServices.showToast(message: message, isError: true);
+  //   });
+  // }
+
   Future<void> signInController(
       {required String email, required String password}) async {
-    //
-    //Simulando o delay para entrar na tela principal.
-
     isLoading.value = true;
 
     AuthResult result =
