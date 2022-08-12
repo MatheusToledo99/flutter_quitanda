@@ -4,6 +4,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
+import 'package:quitanda/src/pages_routes/app_pages.dart';
 import 'package:quitanda/src/services/validators.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -130,6 +131,9 @@ class SignUpScreen extends StatelessWidget {
                                   onPressed: authController.isLoading.value
                                       ? null
                                       : () {
+                                          //
+                                          //Fechar teclado
+                                          FocusScope.of(context).unfocus();
                                           if (_formKey.currentState!
                                               .validate()) {
                                             String email = emailController.text;
@@ -168,7 +172,7 @@ class SignUpScreen extends StatelessWidget {
                 child: SafeArea(
                     child: IconButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Get.offAllNamed(PagesRoutes.signInRoute);
                         },
                         icon: const Icon(
                           Icons.arrow_back_ios_new,

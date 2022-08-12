@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
+import 'package:quitanda/src/pages/auth/view/components/forgot_password_dialog.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/pages_routes/app_pages.dart';
 import 'package:quitanda/src/services/validators.dart';
@@ -159,7 +160,13 @@ class SignInScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ForgotPasswordDialog(
+                                    email: emailController.text),
+                              );
+                            },
                             child: Text(
                               'Esqueci minha senha!',
                               style: TextStyle(

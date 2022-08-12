@@ -47,6 +47,10 @@ class AuthController extends GetxController {
       utilsServices.showToast(message: message, isError: true);
     });
   }
+
+  void signOut() {
+    Get.offAllNamed(PagesRoutes.signInRoute);
+  }
 }
 
   // Future<void> validateTokenController(String token) async {
