@@ -5,6 +5,7 @@ import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/pages_routes/app_pages.dart';
+import 'package:quitanda/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
@@ -100,15 +101,7 @@ class SignInScreen extends StatelessWidget {
                         controller: emailController,
                         label: 'Email',
                         icon: Icons.email,
-                        validator: (email) {
-                          if (email == null || email.isEmpty) {
-                            return 'Digite seu email!';
-                          }
-
-                          if (!email.isEmail) return 'Digite um e-mail valido!';
-
-                          return null;
-                        },
+                        validator: emailValidator,
                       ),
 
                       //entrada de texto para senha
@@ -117,17 +110,7 @@ class SignInScreen extends StatelessWidget {
                         label: 'Senha',
                         icon: Icons.lock,
                         isPassword: true,
-                        validator: (password) {
-                          if (password == null || password.isEmpty) {
-                            return 'Digite sua senha!';
-                          }
-
-                          if (password.length < 7) {
-                            return 'Digite uma senha com pelo menos 7 caracteres';
-                          }
-
-                          return null;
-                        },
+                        validator: passwordValidator,
                       ),
 
                       // Botao de Entrar
