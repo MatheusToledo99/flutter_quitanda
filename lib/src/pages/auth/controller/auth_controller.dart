@@ -14,17 +14,6 @@ class AuthController extends GetxController {
   final utilsServices = UtilsServices();
   UserModel user = UserModel();
 
-  // Future<void> validateTokenController(String token) async {
-  //   AuthResult result = await authRepository.validateToken(token);
-
-  //   result.when(success: (user) {
-  //     utilsServices.showToast(message: 'Token validado');
-  //     Get.offAllNamed(PagesRoutes.baseRoute);
-  //   }, error: (message) {
-  //     utilsServices.showToast(message: message, isError: true);
-  //   });
-  // }
-
   Future<void> signInController(
       {required String email, required String password}) async {
     isLoading.value = true;
@@ -43,15 +32,30 @@ class AuthController extends GetxController {
     });
   }
 
-  Future<void> signUpController({
-    required String email,
-    required String name,
-    required String phone,
-    required String cpf,
-    required String password,
-  }) async {
+  Future<void> signUpController() async {
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
+
+    AuthResult result = await authRepository.signUp(user);
+
     isLoading.value = false;
+
+    result.when(success: (user) {
+      utilsServices.showToast(message: 'Usuário cadastrado com sucesso!');
+      this.user = user;
+      Get.offAllNamed(PagesRoutes.baseRoute);
+    }, error: (message) {
+      utilsServices.showToast(message: message, isError: true);
+    });
   }
 }
+
+  // Future<void> validateTokenController(String token) async {
+  //   AuthResult result = await authRepository.validateToken(token);
+
+  //   result.when(success: (user) {
+  //     utilsServices.showToast(message: 'Token validado');
+  //     Get.offAllNamed(PagesRoutes.baseRoute);
+  //   }, error: (message) {
+  //     utilsServices.showToast(message: message, isError: true);
+  //   });
+  // }

@@ -11,24 +11,12 @@ class AuthRepository {
   //
   final HttpManager _httpManager = HttpManager();
 
-  // Future<AuthResult> validateToken(String token) async {
-  //   final result = await _httpManager.restRequest(
-  //     url: Endpoints.signin,
-  //     method: HttpMethods.post,
-  //     headers: {"X-Parse-Session-Token": token},
-  //   );
+  //Método para Logar
 
-  //   if (result['result'] != null) {
-  //     final UserModel objUser = UserModel.fromJson(result['result']);
-  //     return AuthResult.success(objUser);
-  //   } else {
-  //     return AuthResult.error(authErrors.authErrorsString(result['error']));
-  //   }
-  // }
-
-  Future<AuthResult> signIn(
-      {required String email, required String password}) async {
-    //
+  Future<AuthResult> signIn({
+    required String email,
+    required String password,
+  }) async {
     final result = await _httpManager.restRequest(
       url: Endpoints.signin,
       method: HttpMethods.post,
@@ -45,4 +33,38 @@ class AuthRepository {
       return AuthResult.error(authErrors.authErrorsString(result['error']));
     }
   }
+
+  Future<AuthResult> signUp(UserModel user) async {
+    final result = await _httpManager.restRequest(
+      url: Endpoints.signup,
+      method: HttpMethods.post,
+      body: user.toJson(),
+    );
+
+    if (result['result'] != null) {
+      final UserModel objUser = UserModel.fromJson(result['result']);
+      return AuthResult.success(objUser);
+    } else {
+      return AuthResult.error(authErrors.authErrorsString(result['error']));
+    }
+  }
 }
+
+
+
+
+
+  // Future<AuthResult> validateToken(String token) async {
+  //   final result = await _httpManager.restRequest(
+  //     url: Endpoints.signin,
+  //     method: HttpMethods.post,
+  //     headers: {"X-Parse-Session-Token": token},
+  //   );
+
+  //   if (result['result'] != null) {
+  //     final UserModel objUser = UserModel.fromJson(result['result']);
+  //     return AuthResult.success(objUser);
+  //   } else {
+  //     return AuthResult.error(authErrors.authErrorsString(result['error']));
+  //   }
+  // }

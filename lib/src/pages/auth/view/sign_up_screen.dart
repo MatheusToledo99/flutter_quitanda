@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
+import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/services/validators.dart';
 
@@ -23,6 +25,8 @@ class SignUpScreen extends StatelessWidget {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final cpfController = TextEditingController();
+
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -116,39 +120,41 @@ class SignUpScreen extends StatelessWidget {
                           //Botao de Criar Conta
                           SizedBox(
                             height: 50,
-                            child:
-                                // GetX<AuthController>(
-                                //   builder: (authController) { return
-                                ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                              ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  String email = emailController.text;
-                                  String password = passwordController.text;
-                                  String name = nameController.text;
-                                  String phone = phoneController.text;
-                                  String cpf = cpfController.text;
+                            child: Obx(() => ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                  ),
+                                  onPressed: authController.isLoading.value
+                                      ? null
+                                      : () {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            String email = emailController.text;
+                                            String password =
+                                                passwordController.text;
+                                            String name = nameController.text;
+                                            String phone = phoneController.text;
+                                            String cpf = cpfController.text;
 
-                                  // authController.signUpController(
-                                  //   email: email,
-                                  //   name: name,
-                                  //   phone: phone,
-                                  //   cpf: cpf,
-                                  //   password: password,
-                                  // );
-                                }
-                              },
-                              child: const Text('Cadastrar Usuário',
-                                  style: TextStyle(fontSize: 18.0)),
-                            ),
-                            // ;
-                            //   },
-                            // ),
+                                            authController.user.email = email;
+                                            authController.user.password =
+                                                password;
+                                            authController.user.name = name;
+                                            authController.user.phone = phone;
+                                            authController.user.cpf = cpf;
+
+                                            authController.signUpController();
+                                            // print(authController.user);
+                                          }
+                                        },
+                                  child: authController.isLoading.value
+                                      ? const CircularProgressIndicator()
+                                      : const Text('Cadastrar Usuário',
+                                          style: TextStyle(fontSize: 18.0)),
+                                )),
                           ),
                         ],
                       ),

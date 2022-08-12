@@ -24,7 +24,7 @@ String? passwordValidator(String? password) {
 
 String? nameValidator(String? name) {
   if (name == null || name.isEmpty) {
-    return 'Digite sua senha!';
+    return 'Digite seu nome!';
   }
 
   final names = name.split(' ');
@@ -36,17 +36,19 @@ String? nameValidator(String? name) {
 
 String? phoneValidator(String? phone) {
   if (phone == null || phone.isEmpty) {
-    return 'Digite sua senha!';
+    return 'Digite o nº de seu celular!';
   }
 
-  if (!phone.isPhoneNumber) return 'Digite um numero de telefone válido';
+  if (!phone.isPhoneNumber || phone.length < 16) {
+    return 'Digite um numero de celular válido';
+  }
 
   return null;
 }
 
 String? cpfValidator(String? cpf) {
   if (cpf == null || cpf.isEmpty) {
-    return 'Digite sua senha!';
+    return 'Digite seu CPF!';
   }
 
   if (!cpf.isCpf) return 'Digite um numero de CPF válido';
