@@ -1,4 +1,4 @@
-import 'package:quitanda/src/models/item_model.dart';
+import 'package:quitanda/src/models/item/item_model.dart';
 
 class CartItemModel {
   ItemModel item;
