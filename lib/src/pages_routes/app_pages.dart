@@ -2,12 +2,17 @@ import 'package:get/get.dart';
 import 'package:quitanda/src/pages/auth/view/sign_in_screen.dart';
 import 'package:quitanda/src/pages/auth/view/sign_up_screen.dart';
 import 'package:quitanda/src/pages/base/base_screen.dart';
+import 'package:quitanda/src/pages/home/binding/binding.dart';
 
 abstract class AppPages {
   static final pages = <GetPage>[
     GetPage(name: PagesRoutes.signInRoute, page: () => SignInScreen()),
     GetPage(name: PagesRoutes.signUpRoute, page: () => SignUpScreen()),
-    GetPage(name: PagesRoutes.baseRoute, page: () => const BaseScreen()),
+    GetPage(
+      name: PagesRoutes.baseRoute,
+      page: () => const BaseScreen(),
+      bindings: [HomeBinding()],
+    ),
   ];
 }
 

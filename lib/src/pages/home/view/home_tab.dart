@@ -6,6 +6,8 @@ import 'package:quitanda/src/config/app_data.dart' as appData;
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/home/view/components/category_tile.dart';
 import 'package:quitanda/src/pages/home/view/components/item_tile.dart';
+import 'package:quitanda/src/pages/home/controller/home_controller.dart';
+import 'package:get/get.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -16,6 +18,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   String selectedCategory = '';
+
+  @override
+  void initState() {
+    super.initState();
+    Get.find<HomeController>();
+  }
 
   @override
   Widget build(BuildContext context) {
