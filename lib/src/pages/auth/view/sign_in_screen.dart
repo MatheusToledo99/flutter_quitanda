@@ -6,6 +6,7 @@ import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/auth/view/components/forgot_password_dialog.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/pages_routes/app_pages.dart';
+import 'package:quitanda/src/services/util_services.dart';
 import 'package:quitanda/src/services/validators.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -15,6 +16,7 @@ class SignInScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final utilsServices = UtilsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -160,12 +162,18 @@ class SignInScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () {
-                              showDialog(
+                            onPressed: () async {
+                              final bool? result = await showDialog(
                                 context: context,
                                 builder: (context) => ForgotPasswordDialog(
                                     email: emailController.text),
                               );
+
+                              if (result ?? false) {
+                                utilsServices.showToast(
+                                    message:
+                                        "Link de recuperação enviado para o email");
+                              }
                             },
                             child: Text(
                               'Esqueci minha senha!',

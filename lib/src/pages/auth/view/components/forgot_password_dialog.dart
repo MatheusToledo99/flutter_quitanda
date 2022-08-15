@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 //import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/services/validators.dart';
@@ -14,7 +16,7 @@ class ForgotPasswordDialog extends StatelessWidget {
   }
 
   final _formKey = GlobalKey<FormState>();
-  // final authController = Get.find<AuthController>();
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +84,9 @@ class ForgotPasswordDialog extends StatelessWidget {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      //authController.resetPassword(emailController.text);
-                      //Get.back(result: true);
+                      authController
+                          .resetPasswordController(emailController.text);
+                      Get.back(result: true);
                     }
                   },
                   child: const Text(
