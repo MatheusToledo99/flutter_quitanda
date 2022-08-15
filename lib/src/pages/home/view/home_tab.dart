@@ -9,21 +9,8 @@ import 'package:quitanda/src/pages/home/view/components/item_tile.dart';
 import 'package:quitanda/src/pages/home/controller/home_controller.dart';
 import 'package:get/get.dart';
 
-class HomeTab extends StatefulWidget {
+class HomeTab extends StatelessWidget {
   const HomeTab({Key? key}) : super(key: key);
-
-  @override
-  State<HomeTab> createState() => _HomeTabState();
-}
-
-class _HomeTabState extends State<HomeTab> {
-  String selectedCategory = '';
-
-  @override
-  void initState() {
-    super.initState();
-    Get.find<HomeController>();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,26 +90,31 @@ class _HomeTabState extends State<HomeTab> {
           ),
 
           //Categorias
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 40,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return CategoryTile(
-                    category: appData.categories[index],
-                    isSelected: appData.categories[index] == selectedCategory
-                        ? true
-                        : false,
-                    onPressed: () {
-                      setState(() {
-                        selectedCategory = appData.categories[index];
-                      });
-                    },
-                  );
-                },
-                separatorBuilder: (context, index) => const SizedBox(width: 5),
-                itemCount: appData.categories.length),
+          GetBuilder<HomeController>(
+            builder: (controller) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 40,
+                child: controller.isLoading.value
+                    ? const CircularProgressIndicator()
+                    : ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return CategoryTile(
+                            category: controller.categories[index].title,
+                            isSelected: controller.categories[index] ==
+                                controller.currentCategory,
+                            onPressed: () {
+                              controller
+                                  .selectCategory(controller.categories[index]);
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 5),
+                        itemCount: controller.categories.length),
+              );
+            },
           ),
 
           //Grid de Produtos

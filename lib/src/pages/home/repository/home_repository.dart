@@ -6,7 +6,7 @@ import 'package:quitanda/src/services/http_manager.dart';
 class HomeRepository {
   final HttpManager _httpManager = HttpManager();
 
-  Future<HomeResult> getAllCategories() async {
+  Future<HomeResult<CategoryModel>> getAllCategories() async {
     final result = await _httpManager.restRequest(
       url: Endpoints.getCategoryList,
       method: HttpMethods.post,
@@ -15,13 +15,13 @@ class HomeRepository {
     if (result['result'] != null) {
       //Lista de categorias
       final List<CategoryModel> data =
-          (result['result'] as List<Map<String, dynamic>>)
+          (List<Map<String, dynamic>>.from(result['result']))
               .map(CategoryModel.fromJson)
               .toList();
       return HomeResult<CategoryModel>.success(data);
     } else {
       return HomeResult.error(
-          'Ocorreu um erro inesperável ao recuperar as categorias');
+          'Ocorreu um erro inesperado ao recuperar as categorias');
     }
   }
 }
