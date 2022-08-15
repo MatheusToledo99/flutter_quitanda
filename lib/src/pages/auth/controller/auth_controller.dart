@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:get/get.dart';
-import 'package:quitanda/src/models/user_model.dart';
+import 'package:quitanda/src/models/user/user_model.dart';
 import 'package:quitanda/src/pages/auth/repository/auth_repository.dart';
 import 'package:quitanda/src/pages/auth/result/auth_result.dart';
 import 'package:quitanda/src/pages_routes/app_pages.dart';

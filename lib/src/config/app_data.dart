@@ -1,7 +1,7 @@
 import 'package:quitanda/src/models/cart/cart_item_model.dart';
 import 'package:quitanda/src/models/item/item_model.dart';
 import 'package:quitanda/src/models/order/order_model.dart';
-import 'package:quitanda/src/models/user_model.dart';
+import 'package:quitanda/src/models/user/user_model.dart';
 
 ItemModel apple = ItemModel(
   description:

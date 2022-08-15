@@ -1,4 +1,4 @@
-import 'package:quitanda/src/models/user_model.dart';
+import 'package:quitanda/src/models/user/user_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_result.freezed.dart';
