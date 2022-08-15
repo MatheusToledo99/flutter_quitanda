@@ -19,9 +19,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    // final double alturaTela = MediaQuery.of(context).size.height;
-    // final double larguraTela = MediaQuery.of(context).size.width;
-
     return Scaffold(
       //
       //appBar contendo Título e o Badge
