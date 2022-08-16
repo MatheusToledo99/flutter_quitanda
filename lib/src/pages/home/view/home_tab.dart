@@ -2,7 +2,6 @@
 
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:quitanda/src/config/app_data.dart' as appData;
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/home/view/components/category_tile.dart';
 import 'package:quitanda/src/pages/home/view/components/item_tile.dart';
@@ -118,21 +117,25 @@ class HomeTab extends StatelessWidget {
           ),
 
           //Grid de Produtos
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(10.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-              ),
-              itemCount: appData.items.length,
-              itemBuilder: (context, index) {
-                return ItemTile(
-                  item: appData.items[index],
-                );
-              },
-            ),
+          GetBuilder<HomeController>(
+            builder: (controller) {
+              return Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                  itemCount: controller.allProducts.length,
+                  itemBuilder: (context, index) {
+                    return ItemTile(
+                      item: controller.allProducts[index],
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
