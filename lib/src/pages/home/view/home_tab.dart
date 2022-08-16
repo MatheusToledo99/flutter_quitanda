@@ -11,6 +11,10 @@ import 'package:get/get.dart';
 class HomeTab extends StatelessWidget {
   const HomeTab({Key? key}) : super(key: key);
 
+  void apresentaDados(dado) {
+    print(dado);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +49,7 @@ class HomeTab extends StatelessWidget {
           ],
         ),
 
-        // Badge (Ícone do carrinho indicando quantos itens (não quantidade) foram comprados)
+        // Badge (Ícone do carrinho indicando quantos itens (não quantidade) que foram comprados)
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15.0, top: 15.0),
@@ -118,14 +122,13 @@ class HomeTab extends StatelessWidget {
 
           //Grid de Produtos
           GetBuilder<HomeController>(
+            //Controller de HomeController para acessar os Produtos
             builder: (controller) {
+              apresentaDados(controller.allProducts.toString());
               return controller.isLoadingProduct.value
                   ? const Padding(
                       padding: EdgeInsets.only(top: 200),
-                      child: CircularProgressIndicator(
-                        semanticsValue: 'Carregando os produtos',
-                      ),
-                    )
+                      child: CircularProgressIndicator())
                   : Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(10.0),
