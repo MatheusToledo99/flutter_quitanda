@@ -9,11 +9,25 @@ const int itemsPerPage = 6;
 
 class HomeController extends GetxController {
   //
+  //intancia do utilServices
   final utilsServices = UtilsServices();
+
+  //instancia do HomeRepository
   final homerepository = HomeRepository();
+
+  //metodo get apara pegar todos os produtos de uma certa categoria
   List<ItemModel> get allProducts => currentCategory?.items ?? [];
+
+  //Lista de categorias
   List<CategoryModel> categories = [];
+
+  //Variável que indica o carregamento das categorias
   RxBool isLoading = false.obs;
+
+  //Variável que indica o carregamento dos produtos
+  RxBool isLoadingProduct = true.obs;
+
+  //Variável da Categoria atual
   CategoryModel? currentCategory;
 
   selectCategory(CategoryModel category) {
@@ -22,6 +36,7 @@ class HomeController extends GetxController {
     update();
 
     if (currentCategory!.items.isNotEmpty) return;
+
     getAllProductsController();
   }
 
@@ -56,8 +71,12 @@ class HomeController extends GetxController {
       "itemsPerPage": itemsPerPage
     };
 
+    isLoadingProduct.value = true;
+
     HomeResult<ItemModel> homeResult =
         await homerepository.getAllProducts(body);
+
+    isLoadingProduct.value = false;
 
     homeResult.when(success: (data) {
       currentCategory!.items = data;

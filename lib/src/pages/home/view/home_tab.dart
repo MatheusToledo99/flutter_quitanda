@@ -119,22 +119,30 @@ class HomeTab extends StatelessWidget {
           //Grid de Produtos
           GetBuilder<HomeController>(
             builder: (controller) {
-              return Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(10.0),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                  ),
-                  itemCount: controller.allProducts.length,
-                  itemBuilder: (context, index) {
-                    return ItemTile(
-                      item: controller.allProducts[index],
+              return controller.isLoadingProduct.value
+                  ? const Padding(
+                      padding: EdgeInsets.only(top: 200),
+                      child: CircularProgressIndicator(
+                        semanticsValue: 'Carregando os produtos',
+                      ),
+                    )
+                  : Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(10.0),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                        itemCount: controller.allProducts.length,
+                        itemBuilder: (context, index) {
+                          return ItemTile(
+                            item: controller.allProducts[index],
+                          );
+                        },
+                      ),
                     );
-                  },
-                ),
-              );
             },
           ),
         ],
