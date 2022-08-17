@@ -87,6 +87,8 @@ class HomeController extends GetxController {
     }, error: (message) {
       utilsServices.showToast(message: message, isError: true);
     });
+
+    update();
   }
 
   //Método pegar todos os produtos pela categoria atual
@@ -109,6 +111,8 @@ class HomeController extends GetxController {
     }, error: (message) {
       utilsServices.showToast(message: message, isError: true);
     });
+
+    update();
   }
 
   //Método para aumentar a páginação
