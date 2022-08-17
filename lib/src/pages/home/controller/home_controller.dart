@@ -8,7 +8,14 @@ import 'package:quitanda/src/services/util_services.dart';
 const int itemsPerPage = 6;
 
 class HomeController extends GetxController {
-  //
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- VARIÁVEIS -------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+
   //intancia do utilServices
   final utilsServices = UtilsServices();
 
@@ -30,6 +37,29 @@ class HomeController extends GetxController {
   //Variável da Categoria atual
   CategoryModel? currentCategory;
 
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- MÉTODOS ---------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+
+  //Quando iniciar, chamar o método de categorias
+  @override
+  void onInit() {
+    super.onInit();
+    getAllCategoriesController();
+  }
+
+  //Método para saber se estamos na última pagina do back-end
+  bool get isLastPage {
+    if (currentCategory!.items.length < itemsPerPage) return true;
+
+    return currentCategory!.pagination * itemsPerPage > allProducts.length;
+  }
+
+  //Selecionar a categoria
   selectCategory(CategoryModel category) {
     //categoria atual recebe a categoria passada
     currentCategory = category;
@@ -40,12 +70,7 @@ class HomeController extends GetxController {
     getAllProductsController();
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    getAllCategoriesController();
-  }
-
+  //Método pegar todas as categorias
   Future<void> getAllCategoriesController() async {
     isLoading.value = true;
 
@@ -64,6 +89,7 @@ class HomeController extends GetxController {
     });
   }
 
+  //Método pegar todos os produtos pela categoria atual
   Future<void> getAllProductsController() async {
     Map<String, dynamic> body = {
       "page": currentCategory!.pagination,
@@ -79,9 +105,15 @@ class HomeController extends GetxController {
     isLoadingProduct.value = false;
 
     homeResult.when(success: (data) {
-      currentCategory!.items = data;
+      currentCategory!.items.addAll(data);
     }, error: (message) {
       utilsServices.showToast(message: message, isError: true);
     });
+  }
+
+  //Método para aumentar a páginação
+  void loadMoreProducts() {
+    currentCategory!.pagination++;
+    getAllProductsController();
   }
 }

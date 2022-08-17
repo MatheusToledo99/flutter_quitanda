@@ -11,10 +11,6 @@ import 'package:get/get.dart';
 class HomeTab extends StatelessWidget {
   const HomeTab({Key? key}) : super(key: key);
 
-  void apresentaDados(dado) {
-    print(dado);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +120,6 @@ class HomeTab extends StatelessWidget {
           GetBuilder<HomeController>(
             //Controller de HomeController para acessar os Produtos
             builder: (controller) {
-              apresentaDados(controller.allProducts.toString());
               return controller.isLoadingProduct.value
                   ? const Padding(
                       padding: EdgeInsets.only(top: 200),
@@ -140,9 +135,11 @@ class HomeTab extends StatelessWidget {
                         ),
                         itemCount: controller.allProducts.length,
                         itemBuilder: (context, index) {
-                          return ItemTile(
-                            item: controller.allProducts[index],
-                          );
+                          if (((index + 1) == controller.allProducts.length) &&
+                              !controller.isLastPage) {
+                            controller.loadMoreProducts();
+                          }
+                          return ItemTile(item: controller.allProducts[index]);
                         },
                       ),
                     );
