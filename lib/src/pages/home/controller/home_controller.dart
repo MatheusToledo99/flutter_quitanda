@@ -37,6 +37,9 @@ class HomeController extends GetxController {
   //Variável da Categoria atual
   CategoryModel? currentCategory;
 
+  //Variável para receber o texto da pesquisa
+  RxString searchTitle = ''.obs;
+
   //                                                                           //
   //                                                                           //
   //                                                                           //
@@ -49,6 +52,10 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    debounce(searchTitle, (_) => filterByTitle(),
+        time: const Duration(milliseconds: 600));
+
     getAllCategoriesController();
   }
 
@@ -96,8 +103,15 @@ class HomeController extends GetxController {
     Map<String, dynamic> body = {
       "page": currentCategory!.pagination,
       "categoryId": currentCategory!.id,
-      "itemsPerPage": itemsPerPage
+      "itemsPerPage": itemsPerPage,
     };
+
+    if (searchTitle.value.isNotEmpty) {
+      body['title'] = searchTitle.value;
+      if (currentCategory!.id == '') {
+        body.remove('categoryId');
+      }
+    }
 
     isLoadingProduct.value = true;
 
@@ -118,6 +132,42 @@ class HomeController extends GetxController {
   //Método para aumentar a páginação
   void loadMoreProducts() {
     currentCategory!.pagination++;
+    getAllProductsController();
+  }
+
+  //|Método para filtro pelo título
+  void filterByTitle() {
+    //Limpando todos os produtos das categorias
+    for (var category in categories) {
+      category.items.clear();
+      category.pagination = 0;
+    }
+
+    if (searchTitle.value.isEmpty) {
+      categories.removeAt(0);
+    } else {
+      CategoryModel? c =
+          categories.firstWhereOrNull((element) => element.id == '');
+
+      if (c == null) {
+        //Criar uma nova categoria com todos
+        final allProductsCategory = CategoryModel(
+          title: 'Tudo',
+          id: '',
+          items: [],
+          pagination: 0,
+        );
+        //Inserindo essa categoria que contém todos os produtos no index 0
+        categories.insert(0, allProductsCategory);
+      } else {
+        c.items.clear();
+        c.pagination = 0;
+      }
+    }
+
+    currentCategory = categories.first;
+    update();
+
     getAllProductsController();
   }
 }

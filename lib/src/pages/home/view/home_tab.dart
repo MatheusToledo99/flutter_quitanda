@@ -9,7 +9,9 @@ import 'package:quitanda/src/pages/home/controller/home_controller.dart';
 import 'package:get/get.dart';
 
 class HomeTab extends StatelessWidget {
-  const HomeTab({Key? key}) : super(key: key);
+  HomeTab({Key? key}) : super(key: key);
+
+  final searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -69,23 +71,45 @@ class HomeTab extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           // Campo de pesquisa
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                isDense: true,
-                hintText: 'Pesquise aqui...',
-                hintStyle: TextStyle(color: Colors.grey.shade400),
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60),
-                  borderSide:
-                      const BorderSide(width: 0, style: BorderStyle.none),
+          GetBuilder<HomeController>(
+            builder: (controller) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    controller.searchTitle.value = value;
+                  },
+                  decoration: InputDecoration(
+                    suffixIcon: controller.searchTitle.value.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              searchController.clear();
+                              controller.searchTitle.value = '';
+                              FocusScope.of(context).unfocus();
+                            },
+                            icon: Icon(
+                              Icons.close,
+                              size: 20,
+                              color: CustomColors.customContrastColor,
+                            ),
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    isDense: true,
+                    hintText: 'Pesquise aqui...',
+                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60),
+                      borderSide:
+                          const BorderSide(width: 0, style: BorderStyle.none),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
 
           //Categorias
@@ -125,22 +149,39 @@ class HomeTab extends StatelessWidget {
                       padding: EdgeInsets.only(top: 200),
                       child: CircularProgressIndicator())
                   : Expanded(
-                      child: GridView.builder(
-                        padding: const EdgeInsets.all(10.0),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
+                      child: Visibility(
+                        visible: (controller.currentCategory?.items ?? [])
+                            .isNotEmpty,
+                        replacement: Column(
+                          children: [
+                            const Padding(padding: EdgeInsets.only(top: 150)),
+                            Icon(
+                              Icons.search_off,
+                              size: 40,
+                              color: CustomColors.customSwatchColor,
+                            ),
+                            const Text('Não ha itens para apresentar')
+                          ],
                         ),
-                        itemCount: controller.allProducts.length,
-                        itemBuilder: (context, index) {
-                          if (((index + 1) == controller.allProducts.length) &&
-                              !controller.isLastPage) {
-                            controller.loadMoreProducts();
-                          }
-                          return ItemTile(item: controller.allProducts[index]);
-                        },
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(10.0),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                          ),
+                          itemCount: controller.allProducts.length,
+                          itemBuilder: (context, index) {
+                            if (((index + 1) ==
+                                    controller.allProducts.length) &&
+                                !controller.isLastPage) {
+                              controller.loadMoreProducts();
+                            }
+                            return ItemTile(
+                                item: controller.allProducts[index]);
+                          },
+                        ),
                       ),
                     );
             },
