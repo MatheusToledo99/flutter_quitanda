@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/models/item/item_model.dart';
+import 'package:quitanda/src/pages/base/controller/navigation_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda/src/pages/home/view/home_tab.dart';
 import 'package:quitanda/src/services/util_services.dart';
@@ -16,7 +18,10 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   final UtilsServices utilsservices = UtilsServices();
+
   int cartItemQuantity = 1;
+
+  final navigationController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +66,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
                           ),
-
+                          //Quantidade do produto
                           QuantityWidget(
                               suffixText: widget.item.unit,
                               value: cartItemQuantity,
@@ -108,7 +113,16 @@ class _ProductScreenState extends State<ProductScreen> {
                               borderRadius: BorderRadius.circular(18.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            //Fechar esta tab
+                            Get.back();
+
+                            //Ir para a Tab do carrinho.
+                            //Neste caso não usamos o Get.offNamed pois não é uma nova tela, e sim uma TAB.
+
+                            navigationController
+                                .navigatePageView(NavigationTabs.cart);
+                          },
                           child: const Text('Adicionar ao carrinho',
                               style: TextStyle(fontSize: 18.0)),
                         ),
