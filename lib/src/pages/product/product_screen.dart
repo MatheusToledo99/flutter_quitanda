@@ -28,7 +28,7 @@ class _ProductScreenState extends State<ProductScreen> {
             children: [
               //Imagem expandida
               Expanded(
-                child: Image.asset(widget.item.imgUrl),
+                child: Image.network(widget.item.imgUrl),
               ),
 
               //Container Expandido para Exibição do Conteúdo
@@ -127,7 +127,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 onPressed: () {
                   Navigator.of(context).pop(
                     MaterialPageRoute(
-                      builder: (context) => const HomeTab(),
+                      builder: (context) => HomeTab(),
                     ),
                   );
                 },
