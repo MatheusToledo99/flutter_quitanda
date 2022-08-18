@@ -1,7 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+abstract class NavigationTabs {
+  static const int home = 0;
+  static const int cart = 0;
+  static const int orders = 0;
+  static const int profile = 0;
+}
+
 class NavigationController extends GetxController {
   late PageController _pageController;
-  final RxInt _currentIndex = 0.obs;
+  late RxInt _currentIndex;
+
+  PageController get pageController {
+    return _pageController;
+  }
+
+  int get currentIndex {
+    return _currentIndex.value;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    initNavigation(
+        pageController: PageController(initialPage: NavigationTabs.home),
+        currentIndex: NavigationTabs.home);
+  }
+
+  void initNavigation({
+    required PageController pageController,
+    required int currentIndex,
+  }) {
+    _pageController = pageController;
+    _currentIndex = currentIndex.obs;
+  }
+
+  void navigatePageView(int page) {
+    if (_currentIndex.value == page) return;
+
+    _pageController.jumpToPage(page);
+    _currentIndex.value = page;
+  }
 }
