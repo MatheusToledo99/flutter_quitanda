@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:quitanda/src/pages/auth/view/sign_in_screen.dart';
 import 'package:quitanda/src/pages/auth/view/sign_up_screen.dart';
 import 'package:quitanda/src/pages/base/base_screen.dart';
+import 'package:quitanda/src/pages/base/binding/navigation_binding.dart';
 import 'package:quitanda/src/pages/home/binding/binding.dart';
 
 abstract class AppPages {
@@ -13,11 +14,15 @@ abstract class AppPages {
     //Rota para a SignUp
     GetPage(name: PagesRoutes.signUpRoute, page: () => SignUpScreen()),
 
-    //Rota para a base, neste momento eu injeto através do HomeBinding a injeção de depedência do HomeController.
+    //Rota para a base, neste momento eu injeto através do HomeBinding a injeção de depedência do HomeController
+    //e da NavigationController através da NavigationBinding.
     GetPage(
       name: PagesRoutes.baseRoute,
-      page: () => const BaseScreen(),
-      bindings: [HomeBinding()],
+      page: () => BaseScreen(),
+      bindings: [
+        HomeBinding(),
+        NavigationBinding(),
+      ],
     ),
   ];
 }
