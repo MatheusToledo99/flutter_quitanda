@@ -3,7 +3,8 @@ import 'package:quitanda/src/pages/auth/view/sign_in_screen.dart';
 import 'package:quitanda/src/pages/auth/view/sign_up_screen.dart';
 import 'package:quitanda/src/pages/base/base_screen.dart';
 import 'package:quitanda/src/pages/base/binding/navigation_binding.dart';
-import 'package:quitanda/src/pages/home/binding/binding.dart';
+import 'package:quitanda/src/pages/cart/binding/cart_binding.dart';
+import 'package:quitanda/src/pages/home/binding/home_binding.dart';
 
 abstract class AppPages {
   static final pages = <GetPage>[
@@ -22,6 +23,7 @@ abstract class AppPages {
       bindings: [
         HomeBinding(),
         NavigationBinding(),
+        CartBinding(),
       ],
     ),
   ];
