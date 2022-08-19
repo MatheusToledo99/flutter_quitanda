@@ -1,9 +1,10 @@
 // ignore_for_file: library_prefixes
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda/src/config/app_data.dart' as appData;
 import 'package:quitanda/src/config/custom_colors.dart';
-import 'package:quitanda/src/models/cart/cart_item_model.dart';
+import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda/src/pages/cart/view/components/cart_tile.dart';
 import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda/src/services/util_services.dart';
@@ -18,21 +19,6 @@ class CartTab extends StatefulWidget {
 class _CartTabState extends State<CartTab> {
   final UtilsServices utilsservices = UtilsServices();
 
-  void removeItemFromCart(CartItemModel cartitem) {
-    setState(() {
-      appData.cartItems.remove(cartitem);
-    });
-  }
-
-  double cartTotalPrice() {
-    double total = 0;
-    for (var element in appData.cartItems) {
-      total += element.totalPrice();
-    }
-
-    return total;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +29,16 @@ class _CartTabState extends State<CartTab> {
         children: [
           // Lista
           Expanded(
-            child: ListView.builder(
-              itemCount: appData.cartItems.length,
-              itemBuilder: (context, index) {
-                return CartTile(
-                    cartItem: appData.cartItems[index],
-                    remove: removeItemFromCart);
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount: controller.cartItems.length,
+                  itemBuilder: (context, index) {
+                    return CartTile(
+                      cartItem: controller.cartItems[index],
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -76,12 +66,17 @@ class _CartTabState extends State<CartTab> {
                 const Text('Total Geral'),
 
                 //Preço do produto
-                Text(
-                  utilsservices.priceToCurrency(cartTotalPrice()),
-                  style: TextStyle(
-                    fontSize: 23,
-                    color: CustomColors.customSwatchColor,
-                  ),
+                GetBuilder<CartController>(
+                  builder: (controller) {
+                    return Text(
+                      utilsservices
+                          .priceToCurrency(controller.cartTotalPrice()),
+                      style: TextStyle(
+                        fontSize: 23,
+                        color: CustomColors.customSwatchColor,
+                      ),
+                    );
+                  },
                 ),
 
                 //Botao para concluir o pedido

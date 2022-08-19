@@ -5,11 +5,9 @@ import 'package:quitanda/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class CartTile extends StatefulWidget {
-  const CartTile({Key? key, required this.cartItem, required this.remove})
-      : super(key: key);
+  const CartTile({Key? key, required this.cartItem}) : super(key: key);
 
   final CartItemModel cartItem;
-  final Function(CartItemModel) remove;
 
   @override
   State<CartTile> createState() => _CartTileState();
@@ -22,7 +20,7 @@ class _CartTileState extends State<CartTile> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Image.asset(
+        leading: Image.network(
           widget.cartItem.item.imgUrl,
           width: 50,
           height: 50,
@@ -44,14 +42,7 @@ class _CartTileState extends State<CartTile> {
           isRemovable: true,
           suffixText: widget.cartItem.item.unit,
           value: widget.cartItem.quantity,
-          result: (quantity) {
-            setState(() {
-              widget.cartItem.quantity = quantity;
-              if (quantity == 0) {
-                widget.remove(widget.cartItem);
-              }
-            });
-          },
+          result: (quantity) {},
         ),
       ),
     );
