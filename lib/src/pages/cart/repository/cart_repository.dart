@@ -9,8 +9,10 @@ class CartRepository {
   final HttpManager _httpManager = HttpManager();
 
   //Buscar Itens
-  Future<CartResult<CartItemModel>> getCartItems(
-      {required String token, required userId}) async {
+  Future<CartResult<List<CartItemModel>>> getCartItems({
+    required String token,
+    required userId,
+  }) async {
     final result = await _httpManager.restRequest(
       url: Endpoints.getCartItems,
       method: HttpMethods.post,
@@ -23,16 +25,35 @@ class CartRepository {
           List<Map<String, dynamic>>.from(result['result'])
               .map(CartItemModel.fromJson)
               .toList();
-      return CartResult<CartItemModel>.success(data);
+      return CartResult<List<CartItemModel>>.success(data);
     } else {
       return CartResult.error('Ocorreu um erro na requisição');
     }
   }
 
   //Adicionar item
-  Future<void> addCartItems() async {
-    _httpManager.restRequest(
-        url: Endpoints.addItemToCart, method: HttpMethods.post);
+  Future<CartResult<String>> addCartItems(
+      {required String token,
+      required String userId,
+      required int quantity,
+      required String productId}) async {
+    final result = await _httpManager.restRequest(
+        url: Endpoints.addItemToCart,
+        method: HttpMethods.post,
+        body: {
+          'user': userId,
+          'quantity': quantity,
+          'productId': productId,
+        },
+        headers: {
+          'X-Parse-Session-Token': token,
+        });
+
+    if (result['result'] != null) {
+      return CartResult<String>.success(result['result']['id']);
+    } else {
+      return CartResult<String>.error('message');
+    }
   }
 
   //Modificar quantidade do item
