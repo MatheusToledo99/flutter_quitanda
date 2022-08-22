@@ -20,7 +20,7 @@ class BaseScreen extends StatelessWidget {
         controller: navigationController.pageController,
         children: [
           HomeTab(),
-          const CartTab(),
+          CartTab(),
           const OrdersTab(),
           const ProfileTab(),
         ],
