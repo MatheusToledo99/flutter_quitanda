@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/models/item/item_model.dart';
 import 'package:quitanda/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda/src/pages/home/view/home_tab.dart';
 import 'package:quitanda/src/services/util_services.dart';
@@ -22,6 +23,7 @@ class _ProductScreenState extends State<ProductScreen> {
   int cartItemQuantity = 1;
 
   final navigationController = Get.find<NavigationController>();
+  final cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class _ProductScreenState extends State<ProductScreen> {
         children: [
           Column(
             children: [
+              //
               //Imagem expandida
               Expanded(
                 child: Image.network(widget.item.imgUrl),
@@ -103,7 +106,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       ),
 
-                      //Botao de adicionar ao carrinho
+                      //Botao de adicionar ao carrinho (tela detalhada dos produtos)
                       SizedBox(
                         height: 50,
                         child: ElevatedButton(
@@ -117,11 +120,14 @@ class _ProductScreenState extends State<ProductScreen> {
                             //Fechar esta tab
                             Get.back();
 
+                            //Injeção de dependência, chamando o metodo para adicionar item
+                            cartController.addItemToCart(item: widget.item);
+
                             //Ir para a Tab do carrinho.
                             //Neste caso não usamos o Get.offNamed pois não é uma nova tela, e sim uma TAB.
 
-                            navigationController
-                                .navigatePageView(NavigationTabs.cart);
+                            // navigationController
+                            //     .navigatePageView(NavigationTabs.cart);
                           },
                           child: const Text('Adicionar ao carrinho',
                               style: TextStyle(fontSize: 18.0)),
@@ -133,6 +139,8 @@ class _ProductScreenState extends State<ProductScreen> {
               ),
             ],
           ),
+
+          //Botão que também adiciona o produto ao carrinho (tela de todos os produtos)
           Positioned(
             left: 10,
             top: 10,
