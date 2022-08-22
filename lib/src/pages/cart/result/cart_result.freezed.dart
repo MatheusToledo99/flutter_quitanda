@@ -18,19 +18,19 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CartResult<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> data) success,
+    required TResult Function(T data) success,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -78,7 +78,7 @@ abstract class _$$SuccessCopyWith<T, $Res> {
   factory _$$SuccessCopyWith(
           _$Success<T> value, $Res Function(_$Success<T>) then) =
       __$$SuccessCopyWithImpl<T, $Res>;
-  $Res call({List<T> data});
+  $Res call({T data});
 }
 
 /// @nodoc
@@ -97,9 +97,9 @@ class __$$SuccessCopyWithImpl<T, $Res> extends _$CartResultCopyWithImpl<T, $Res>
   }) {
     return _then(_$Success<T>(
       data == freezed
-          ? _value._data
+          ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<T>,
+              as T,
     ));
   }
 }
@@ -107,14 +107,10 @@ class __$$SuccessCopyWithImpl<T, $Res> extends _$CartResultCopyWithImpl<T, $Res>
 /// @nodoc
 
 class _$Success<T> implements Success<T> {
-  _$Success(final List<T> data) : _data = data;
+  _$Success(this.data);
 
-  final List<T> _data;
   @override
-  List<T> get data {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_data);
-  }
+  final T data;
 
   @override
   String toString() {
@@ -126,12 +122,12 @@ class _$Success<T> implements Success<T> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Success<T> &&
-            const DeepCollectionEquality().equals(other._data, _data));
+            const DeepCollectionEquality().equals(other.data, data));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
 
   @JsonKey(ignore: true)
   @override
@@ -141,7 +137,7 @@ class _$Success<T> implements Success<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> data) success,
+    required TResult Function(T data) success,
     required TResult Function(String message) error,
   }) {
     return success(data);
@@ -150,7 +146,7 @@ class _$Success<T> implements Success<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
   }) {
     return success?.call(data);
@@ -159,7 +155,7 @@ class _$Success<T> implements Success<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -202,9 +198,9 @@ class _$Success<T> implements Success<T> {
 }
 
 abstract class Success<T> implements CartResult<T> {
-  factory Success(final List<T> data) = _$Success<T>;
+  factory Success(final T data) = _$Success<T>;
 
-  List<T> get data;
+  T get data;
   @JsonKey(ignore: true)
   _$$SuccessCopyWith<T, _$Success<T>> get copyWith =>
       throw _privateConstructorUsedError;
@@ -272,7 +268,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<T> data) success,
+    required TResult Function(T data) success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -281,7 +277,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
   }) {
     return error?.call(message);
@@ -290,7 +286,7 @@ class _$Error<T> implements Error<T> {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<T> data)? success,
+    TResult Function(T data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
