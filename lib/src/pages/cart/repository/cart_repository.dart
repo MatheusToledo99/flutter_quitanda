@@ -57,8 +57,24 @@ class CartRepository {
   }
 
   //Modificar quantidade do item
-  Future<void> modifyQuantityCartItems() async {
-    _httpManager.restRequest(
-        url: Endpoints.modifyItemQuantity, method: HttpMethods.post);
+  Future<bool> modifyQuantityCartItems({
+    required String token,
+    required String cartItemId,
+    required int quantitity,
+  }) async {
+    final result = await _httpManager.restRequest(
+      url: Endpoints.modifyItemQuantity,
+      method: HttpMethods.post,
+      body: {
+        'cartItemId': cartItemId,
+        'quantity': quantitity,
+      },
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+    );
+
+    if (result.isEmpty) return true;
+    return false;
   }
 }

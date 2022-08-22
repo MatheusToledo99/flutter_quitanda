@@ -11,6 +11,7 @@ class CartController extends GetxController {
   final authController = Get.find<AuthController>();
   List<CartItemModel> cartItems = [];
 
+//Método para quando iniciar, chamar o getCartItemsController
   @override
   void onInit() {
     super.onInit();
@@ -18,7 +19,7 @@ class CartController extends GetxController {
   }
 
 //Calcular o Preço Total do carrinho
-  double cartTotalPrice() {
+  double cartTotalPriceController() {
     double total = 0;
     for (var item in cartItems) {
       total += item.totalPrice();
@@ -46,16 +47,17 @@ class CartController extends GetxController {
   }
 
 //Pegar o Index do produto
-  int getIndexId(ItemModel item) {
-    int indexItem = cartItems.indexWhere((element) => element.id == item.id);
+  int getIndexIdController(ItemModel item) {
+    int indexItem =
+        cartItems.indexWhere((element) => element.item.id == item.id);
 
     return indexItem;
   }
 
 //Enviar para o repositório o item a ser adiocionado
-  Future<void> addItemToCart(
+  Future<void> addItemToCartController(
       {int quantity = 1, required ItemModel item}) async {
-    int indexItem = getIndexId(item);
+    int indexItem = getIndexIdController(item);
 
     if (indexItem == -1) {
       //Adicionar elemento não existente
@@ -75,13 +77,44 @@ class CartController extends GetxController {
               quantity: quantity,
             ),
           );
+          UtilsServices().showToast(message: 'Produto adicionado com sucesso!');
         },
         error: (message) =>
             UtilsServices().showToast(message: message, isError: true),
       );
     } else {
       //O elemento já existe
-      cartItems[indexItem].quantity += quantity;
+      await modifyQuantityCartItems(
+          item: cartItems[indexItem],
+          quantity: cartItems[indexItem].quantity + quantity);
     }
+    update();
+  }
+
+//Enviar para o repositório a quantidade do item a ser adionado ou removido
+  Future<bool> modifyQuantityCartItems(
+      {required CartItemModel item, required int quantity}) async {
+    final result = await cartRepository.modifyQuantityCartItems(
+      token: authController.user.token!,
+      cartItemId: item.id,
+      quantitity: quantity,
+    );
+
+    if (result == true) {
+      if (quantity == 0) {
+        cartItems.removeWhere((element) => element.id == item.id);
+      } else {
+        cartItems.firstWhere((element) => element.id == item.id).quantity =
+            quantity;
+      }
+      update();
+    } else {
+      UtilsServices().showToast(
+        message: 'Ocorreu um erro ao alterar as quantidades no carrinho',
+        isError: true,
+      );
+    }
+
+    return result;
   }
 }

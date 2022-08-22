@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/models/item/item_model.dart';
-import 'package:quitanda/src/pages/product/product_screen.dart';
+import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
+import 'package:quitanda/src/pages_routes/app_pages.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class ItemTile extends StatelessWidget {
   ItemTile({Key? key, required this.item}) : super(key: key);
 
   final ItemModel item;
+
+  final cartController = Get.find<CartController>();
 
   final UtilsServices utilsservices = UtilsServices();
 
@@ -18,11 +22,7 @@ class ItemTile extends StatelessWidget {
         //Card contendo foto, nome, preço e unidade
         GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProductScreen(item: item),
-              ),
-            );
+            Get.toNamed(PagesRoutes.productRoute, arguments: item);
           },
           child: Card(
             elevation: 1,
@@ -80,7 +80,9 @@ class ItemTile extends StatelessWidget {
           top: 4,
           right: 4,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              cartController.addItemToCartController(item: item);
+            },
             child: Container(
               height: 35,
               width: 35,

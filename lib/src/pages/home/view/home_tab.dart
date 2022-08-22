@@ -3,6 +3,8 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
+import 'package:quitanda/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda/src/pages/home/view/components/category_tile.dart';
 import 'package:quitanda/src/pages/home/view/components/item_tile.dart';
 import 'package:quitanda/src/pages/home/controller/home_controller.dart';
@@ -12,6 +14,7 @@ class HomeTab extends StatelessWidget {
   HomeTab({Key? key}) : super(key: key);
 
   final searchController = TextEditingController();
+  final navigationController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +54,24 @@ class HomeTab extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 15.0, top: 15.0),
-            child: GestureDetector(
-              onTap: () {},
-              child: Badge(
-                badgeColor: CustomColors.customContrastColor,
-                badgeContent: const Text(
-                  '2',
-                  style: TextStyle(color: Colors.white),
-                ),
-                child: Icon(Icons.shopping_cart,
-                    color: CustomColors.customSwatchColor),
-              ),
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return GestureDetector(
+                  onTap: () {
+                    Get.back();
+                    navigationController.navigatePageView(NavigationTabs.cart);
+                  },
+                  child: Badge(
+                    badgeColor: CustomColors.customContrastColor,
+                    badgeContent: Text(
+                      controller.cartItems.length.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    child: Icon(Icons.shopping_cart,
+                        color: CustomColors.customSwatchColor),
+                  ),
+                );
+              },
             ),
           ),
         ],

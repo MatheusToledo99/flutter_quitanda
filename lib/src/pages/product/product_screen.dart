@@ -8,22 +8,21 @@ import 'package:quitanda/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda/src/pages/home/view/home_tab.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key, required this.item}) : super(key: key);
+// ignore: must_be_immutable
+class ProductScreen extends StatelessWidget {
+  ProductScreen({
+    Key? key,
+  }) : super(key: key);
 
-  final ItemModel item;
+  final ItemModel item = Get.arguments;
 
-  @override
-  State<ProductScreen> createState() => _ProductScreenState();
-}
+  final cartController = Get.find<CartController>();
 
-class _ProductScreenState extends State<ProductScreen> {
   final UtilsServices utilsservices = UtilsServices();
 
   int cartItemQuantity = 1;
 
   final navigationController = Get.find<NavigationController>();
-  final cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class _ProductScreenState extends State<ProductScreen> {
               //
               //Imagem expandida
               Expanded(
-                child: Image.network(widget.item.imgUrl),
+                child: Image.network(item.imgUrl),
               ),
 
               //Container Expandido para Exibição do Conteúdo
@@ -62,7 +61,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           //Nome do produto
                           Expanded(
                             child: Text(
-                              widget.item.itemName,
+                              item.itemName,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -71,19 +70,19 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                           //Quantidade do produto
                           QuantityWidget(
-                              suffixText: widget.item.unit,
+                              suffixText: item.unit,
                               value: cartItemQuantity,
                               result: (quantity) {
-                                setState(() {
-                                  cartItemQuantity = quantity;
-                                });
+                                // setState(() {
+                                //   cartItemQuantity = quantity;
+                                // });
                               }),
                         ],
                       ),
 
                       //Preço do Produto
                       Text(
-                        utilsservices.priceToCurrency(widget.item.price),
+                        utilsservices.priceToCurrency(item.price),
                         style: TextStyle(
                           fontSize: 40,
                           color: CustomColors.customSwatchColor,
@@ -96,7 +95,7 @@ class _ProductScreenState extends State<ProductScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: SingleChildScrollView(
                             child: Text(
-                              widget.item.description,
+                              item.description,
                               style: const TextStyle(
                                 fontSize: 15,
                                 height: 1.5,
@@ -121,13 +120,13 @@ class _ProductScreenState extends State<ProductScreen> {
                             Get.back();
 
                             //Injeção de dependência, chamando o metodo para adicionar item
-                            cartController.addItemToCart(item: widget.item);
+                            cartController.addItemToCartController(item: item);
 
                             //Ir para a Tab do carrinho.
                             //Neste caso não usamos o Get.offNamed pois não é uma nova tela, e sim uma TAB.
 
-                            // navigationController
-                            //     .navigatePageView(NavigationTabs.cart);
+                            navigationController
+                                .navigatePageView(NavigationTabs.cart);
                           },
                           child: const Text('Adicionar ao carrinho',
                               style: TextStyle(fontSize: 18.0)),

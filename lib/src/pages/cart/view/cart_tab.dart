@@ -9,14 +9,9 @@ import 'package:quitanda/src/pages/cart/view/components/cart_tile.dart';
 import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
-class CartTab extends StatefulWidget {
-  const CartTab({Key? key}) : super(key: key);
+class CartTab extends StatelessWidget {
+  CartTab({Key? key}) : super(key: key);
 
-  @override
-  State<CartTab> createState() => _CartTabState();
-}
-
-class _CartTabState extends State<CartTab> {
   final UtilsServices utilsservices = UtilsServices();
 
   @override
@@ -31,14 +26,35 @@ class _CartTabState extends State<CartTab> {
           Expanded(
             child: GetBuilder<CartController>(
               builder: (controller) {
-                return ListView.builder(
-                  itemCount: controller.cartItems.length,
-                  itemBuilder: (context, index) {
-                    return CartTile(
-                      cartItem: controller.cartItems[index],
-                    );
-                  },
-                );
+                return controller.cartItems.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: controller.cartItems.length,
+                        itemBuilder: (context, index) {
+                          return CartTile(
+                            cartItem: controller.cartItems[index],
+                          );
+                        },
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text(
+                            'Não há itens no seu carrinho!',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Icon(
+                              Icons.remove_shopping_cart_outlined,
+                              color: Colors.red,
+                              size: 40,
+                            ),
+                          ),
+                        ],
+                      );
               },
             ),
           ),
@@ -69,8 +85,8 @@ class _CartTabState extends State<CartTab> {
                 GetBuilder<CartController>(
                   builder: (controller) {
                     return Text(
-                      utilsservices
-                          .priceToCurrency(controller.cartTotalPrice()),
+                      utilsservices.priceToCurrency(
+                          controller.cartTotalPriceController()),
                       style: TextStyle(
                         fontSize: 23,
                         color: CustomColors.customSwatchColor,
@@ -91,7 +107,7 @@ class _CartTabState extends State<CartTab> {
                       primary: CustomColors.customSwatchColor,
                     ),
                     onPressed: () async {
-                      bool? result = await showOrderConfirmation();
+                      bool? result = await showOrderConfirmation(context);
                       if (result ?? false) {
                         showDialog(
                           context: context,
@@ -112,7 +128,7 @@ class _CartTabState extends State<CartTab> {
     );
   }
 
-  Future<bool?> showOrderConfirmation() {
+  Future<bool?> showOrderConfirmation(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
