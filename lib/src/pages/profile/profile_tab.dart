@@ -32,54 +32,59 @@ class _ProfileTabState extends State<ProfileTab> {
       ),
 
       //ListView contendo os TextsField de Email, Nome, Celular e CPF
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
-        children: [
-          CustomTextField(
-            initialValue: appData.user.email,
-            readOnly: true,
-            label: 'Email',
-            icon: Icons.email,
-          ),
-          CustomTextField(
-            initialValue: appData.user.name,
-            readOnly: true,
-            label: 'Nome',
-            icon: Icons.person,
-          ),
-          CustomTextField(
-            initialValue: appData.user.phone,
-            readOnly: true,
-            label: 'Celular',
-            icon: Icons.phone,
-          ),
-          CustomTextField(
-            initialValue: appData.user.cpf,
-            readOnly: true,
-            label: 'CPF',
-            icon: Icons.file_copy,
-            isPassword: true,
-          ),
-          SizedBox(
-            height: 50,
-            child: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(width: 2, color: Colors.green),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+
+      body: GetBuilder<AuthController>(
+        builder: (controller) {
+          return ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
+            children: [
+              CustomTextField(
+                initialValue: controller.user.email,
+                readOnly: true,
+                label: 'Email',
+                icon: Icons.email,
+              ),
+              CustomTextField(
+                initialValue: controller.user.name,
+                readOnly: true,
+                label: 'Nome',
+                icon: Icons.person,
+              ),
+              CustomTextField(
+                initialValue: controller.user.phone,
+                readOnly: true,
+                label: 'Celular',
+                icon: Icons.phone,
+              ),
+              CustomTextField(
+                initialValue: controller.user.cpf,
+                readOnly: true,
+                label: 'CPF',
+                icon: Icons.file_copy,
+                isPassword: true,
+              ),
+              SizedBox(
+                height: 50,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(width: 2, color: Colors.green),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    await updatePassword();
+                  },
+                  child: const Text(
+                    'Atualizar senha',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
                 ),
               ),
-              onPressed: () async {
-                await updatePassword();
-              },
-              child: const Text(
-                'Atualizar senha',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
