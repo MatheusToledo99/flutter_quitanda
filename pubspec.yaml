@@ -45,6 +45,7 @@ dependencies:
   freezed: ^2.1.0+1
   freezed_annotation: ^2.1.0
   fluttertoast: ^8.0.9  
+  clipboard: ^0.1.3
   
   
 
