@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quitanda/src/models/cart/cart_item_model.dart';
 import 'package:quitanda/src/models/order/order_model.dart';
 import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
-import 'package:quitanda/src/pages/orders/components/order_status_widget.dart';
+import 'package:quitanda/src/pages/orders/view/components/order_status_widget.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class OrderTile extends StatelessWidget {

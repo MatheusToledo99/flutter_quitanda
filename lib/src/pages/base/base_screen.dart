@@ -4,7 +4,7 @@ import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/base/controller/navigation_controller.dart';
 import 'package:quitanda/src/pages/cart/view/cart_tab.dart';
 import 'package:quitanda/src/pages/home/view/home_tab.dart';
-import 'package:quitanda/src/pages/orders/orders_tab.dart';
+import 'package:quitanda/src/pages/orders/view/orders_tab.dart';
 import 'package:quitanda/src/pages/profile/profile_tab.dart';
 
 class BaseScreen extends StatelessWidget {

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:quitanda/src/config/app_data.dart' as appData;
-import 'package:quitanda/src/pages/orders/components/order_tile.dart';
+import 'package:quitanda/src/pages/orders/view/components/order_tile.dart';
 
 class OrdersTab extends StatelessWidget {
   const OrdersTab({Key? key}) : super(key: key);
