@@ -1,15 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda/src/models/cart/cart_item_model.dart';
 import 'package:quitanda/src/models/item/item_model.dart';
 import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/cart/repository/cart_repository.dart';
 import 'package:quitanda/src/pages/cart/result/cart_result.dart';
+import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class CartController extends GetxController {
   final cartRepository = CartRepository();
   final authController = Get.find<AuthController>();
   List<CartItemModel> cartItems = [];
+  bool isLoading = false;
+  final utilsServices = UtilsServices();
 
 //Método para quando iniciar, chamar o getCartItemsController
   @override
@@ -55,7 +59,8 @@ class CartController extends GetxController {
   }
 
 //Enviar para o repositório o item a ser adiocionado
-  Future<void> addItemToCartController({int quantity = 1, required ItemModel item}) async {
+  Future<void> addItemToCartController(
+      {int quantity = 1, required ItemModel item}) async {
     int indexItem = getIndexIdController(item);
 
     if (indexItem == -1) {
@@ -76,22 +81,23 @@ class CartController extends GetxController {
               quantity: quantity,
             ),
           );
-          UtilsServices().showToast(message: 'Produto adicionado com sucesso!');
+          utilsServices.showToast(message: 'Produto adicionado com sucesso!');
         },
         error: (message) =>
-            UtilsServices().showToast(message: message, isError: true),
+            utilsServices.showToast(message: message, isError: true),
       );
     } else {
       //O elemento já existe
-      await modifyQuantityCartItems(
+      await modifyQuantityCartItemsController(
           item: cartItems[indexItem],
           quantity: cartItems[indexItem].quantity + quantity);
+      utilsServices.showToast(message: 'Produto adicionado com sucesso!');
     }
     update();
   }
 
 //Enviar para o repositório a quantidade do item a ser adionado ou removido
-  Future<bool> modifyQuantityCartItems(
+  Future<bool> modifyQuantityCartItemsController(
       {required CartItemModel item, required int quantity}) async {
     final result = await cartRepository.modifyQuantityCartItems(
       token: authController.user.token!,
@@ -106,7 +112,6 @@ class CartController extends GetxController {
         cartItems.firstWhere((element) => element.id == item.id).quantity =
             quantity;
       }
-      update();
     } else {
       UtilsServices().showToast(
         message: 'Ocorreu um erro ao alterar as quantidades no carrinho',
@@ -114,6 +119,36 @@ class CartController extends GetxController {
       );
     }
 
+    update();
     return result;
+  }
+
+  Future<void> chekoutController() async {
+    isLoading = true;
+    update();
+
+    final result = await cartRepository.checkoutCart(
+      token: authController.user.token!,
+      total: cartTotalPriceController(),
+    );
+
+    isLoading = false;
+    update();
+
+    result.when(
+      success: (data) {
+        cartItems.clear();
+
+        showDialog(
+          context: Get.context!,
+          builder: (context) => PaymentDialog(order: data),
+        );
+      },
+      error: (message) {
+        UtilsServices().showToast(message: message, isError: true);
+      },
+    );
+
+    update();
   }
 }

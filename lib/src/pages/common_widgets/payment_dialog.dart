@@ -1,5 +1,5 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:quitanda/src/models/order/order_model.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
@@ -29,10 +29,15 @@ class PaymentDialog extends StatelessWidget {
                 ),
 
                 //QR Code
-                QrImage(
-                  data: "1234567890",
-                  version: QrVersions.auto,
-                  size: 200.0,
+                // QrImage(
+                //   data: "1234567890",
+                //   version: QrVersions.auto,
+                //   size: 200.0,
+                // ),
+                Image.memory(
+                  width: 200,
+                  height: 200,
+                  utilsServices.decodeQrCodeImage(order.qrCodeImage),
                 ),
 
                 //Vencimento
@@ -48,9 +53,11 @@ class PaymentDialog extends StatelessWidget {
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
 
-                //Botão
+                //Botão copia e cola
                 OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    FlutterClipboard.copy(order.copyAndPaste);
+                  },
                   icon: const Icon(Icons.copy),
                   label: const Text('Copiar código Pix'),
                 )
@@ -62,10 +69,11 @@ class PaymentDialog extends StatelessWidget {
             top: 0,
             right: 0,
             child: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(Icons.close)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.close),
+            ),
           )
         ],
       ),

@@ -2,17 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quitanda/src/config/app_data.dart' as appData;
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda/src/pages/cart/view/components/cart_tile.dart';
-import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class CartTab extends StatelessWidget {
   CartTab({Key? key}) : super(key: key);
 
   final UtilsServices utilsservices = UtilsServices();
+  final cartController = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -98,26 +97,35 @@ class CartTab extends StatelessWidget {
                 //Botao para concluir o pedido
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      primary: CustomColors.customSwatchColor,
-                    ),
-                    onPressed: () async {
-                      bool? result = await showOrderConfirmation(context);
-                      if (result ?? false) {
-                        showDialog(
-                          context: context,
-                          builder: (context) =>
-                              PaymentDialog(order: appData.orders.first),
-                        );
-                      }
+                  child: GetBuilder<CartController>(
+                    builder: (controller) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          primary: CustomColors.customSwatchColor,
+                        ),
+                        onPressed: controller.isLoading
+                            ? null
+                            : () async {
+                                bool? result =
+                                    await showOrderConfirmation(context);
+
+                                if (result ?? false) {
+                                  cartController.chekoutController();
+                                } else {
+                                  utilsservices.showToast(
+                                      message: 'Pedido não concluído');
+                                }
+                              },
+                        child: controller.isLoading
+                            ? const CircularProgressIndicator()
+                            : const Text('Concluir Pedido',
+                                style: TextStyle(fontSize: 18.0)),
+                      );
                     },
-                    child: const Text('Concluir Pedido',
-                        style: TextStyle(fontSize: 18.0)),
                   ),
                 ),
               ],

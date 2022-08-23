@@ -2,6 +2,7 @@
 
 import 'package:quitanda/src/constants/endpoints.dart';
 import 'package:quitanda/src/models/cart/cart_item_model.dart';
+import 'package:quitanda/src/models/order/order_model.dart';
 import 'package:quitanda/src/pages/cart/result/cart_result.dart';
 import 'package:quitanda/src/services/http_manager.dart';
 
@@ -76,5 +77,27 @@ class CartRepository {
 
     if (result.isEmpty) return true;
     return false;
+  }
+
+  //Finalizar a compra do carrinho para gerar o pedido
+  Future<CartResult<OrderModel>> checkoutCart(
+      {required String token, required double total}) async {
+    final result = await _httpManager.restRequest(
+      url: Endpoints.checkout,
+      method: HttpMethods.post,
+      body: {
+        'total': total,
+      },
+      headers: {
+        'X-Parse-Session-Token': token,
+      },
+    );
+
+    if (result['result'] != null) {
+      final OrderModel data = OrderModel.fromJson(result['result']);
+      return CartResult.success(data);
+    } else {
+      return CartResult.error('Não foi possível concluir o pedido');
+    }
   }
 }
