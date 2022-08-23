@@ -53,17 +53,31 @@ class AuthController extends GetxController {
   }
 
   void signOut() {
+    user = UserModel();
     Get.offAllNamed(PagesRoutes.signInRoute);
   }
+
+  Future<void> changePasswordController({
+    required String newPassword,
+    required String currentPassword,
+  }) async {
+    isLoading.value = true;
+
+    final result = await authRepository.changePassword(
+      email: user.email!,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      token: user.token!,
+    );
+
+    isLoading.value = false;
+
+    if (result) {
+      utilsServices.showToast(
+          message: 'Senha alterada com sucesso, entre novamente');
+      signOut();
+    } else {
+      utilsServices.showToast(message: 'Sua Senha Atual está errada');
+    }
+  }
 }
-
-  // Future<void> validateTokenController(String token) async {
-  //   AuthResult result = await authRepository.validateToken(token);
-
-  //   result.when(success: (user) {
-  //     utilsServices.showToast(message: 'Token validado');
-  //     Get.offAllNamed(PagesRoutes.baseRoute);
-  //   }, error: (message) {
-  //     utilsServices.showToast(message: message, isError: true);
-  //   });
-  // }

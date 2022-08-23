@@ -1,10 +1,11 @@
 // ignore_for_file: library_prefixes
 
 import 'package:get/get.dart';
-import 'package:quitanda/src/config/app_data.dart' as appData;
 import 'package:flutter/material.dart';
 import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
+import 'package:quitanda/src/services/util_services.dart';
+import 'package:quitanda/src/services/validators.dart';
 
 class ProfileTab extends StatefulWidget {
   const ProfileTab({Key? key}) : super(key: key);
@@ -33,64 +34,65 @@ class _ProfileTabState extends State<ProfileTab> {
 
       //ListView contendo os TextsField de Email, Nome, Celular e CPF
 
-      body: GetBuilder<AuthController>(
-        builder: (controller) {
-          return ListView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
-            children: [
-              CustomTextField(
-                initialValue: controller.user.email,
-                readOnly: true,
-                label: 'Email',
-                icon: Icons.email,
-              ),
-              CustomTextField(
-                initialValue: controller.user.name,
-                readOnly: true,
-                label: 'Nome',
-                icon: Icons.person,
-              ),
-              CustomTextField(
-                initialValue: controller.user.phone,
-                readOnly: true,
-                label: 'Celular',
-                icon: Icons.phone,
-              ),
-              CustomTextField(
-                initialValue: controller.user.cpf,
-                readOnly: true,
-                label: 'CPF',
-                icon: Icons.file_copy,
-                isPassword: true,
-              ),
-              SizedBox(
-                height: 50,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(width: 2, color: Colors.green),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                  ),
-                  onPressed: () async {
-                    await updatePassword();
-                  },
-                  child: const Text(
-                    'Atualizar senha',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
+        children: [
+          CustomTextField(
+            initialValue: authController.user.email,
+            readOnly: true,
+            label: 'Email',
+            icon: Icons.email,
+          ),
+          CustomTextField(
+            initialValue: authController.user.name,
+            readOnly: true,
+            label: 'Nome',
+            icon: Icons.person,
+          ),
+          CustomTextField(
+            initialValue: authController.user.phone,
+            readOnly: true,
+            label: 'Celular',
+            icon: Icons.phone,
+          ),
+          CustomTextField(
+            initialValue: authController.user.cpf,
+            readOnly: true,
+            label: 'CPF',
+            icon: Icons.file_copy,
+            isPassword: true,
+          ),
+          SizedBox(
+            height: 50,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(width: 2, color: Colors.green),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
               ),
-            ],
-          );
-        },
+              onPressed: () async {
+                await updatePassword();
+              },
+              child: const Text(
+                'Atualizar senha',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   //Função para Atualizar Senha
   Future<bool?> updatePassword() {
+    final TextEditingController newPassword = TextEditingController();
+    final TextEditingController confirmPassword = TextEditingController();
+    final TextEditingController currentPassword = TextEditingController();
+    final utilsServices = UtilsServices();
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -121,40 +123,64 @@ class _ProfileTabState extends State<ProfileTab> {
 
                     //Senha Atual
                     CustomTextField(
-                      initialValue: appData.user.password,
-                      readOnly: true,
+                      controller: currentPassword,
                       label: 'Senha Atual',
                       icon: Icons.lock,
                       isPassword: true,
+                      validator: passwordValidator,
                     ),
 
                     //Nova Senha
-                    const CustomTextField(
+                    CustomTextField(
+                      controller: newPassword,
                       label: 'Nova Senha',
                       icon: Icons.lock_outline,
                       isPassword: true,
+                      validator: passwordValidator,
                     ),
 
                     //Confirmação de Senha
-                    const CustomTextField(
+                    CustomTextField(
+                      controller: confirmPassword,
                       label: 'Confirmação de Senha',
                       icon: Icons.lock_outline,
                       isPassword: true,
+                      validator: passwordValidator,
                     ),
 
                     //Botao de Atualização
                     SizedBox(
                       height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                      child: Obx(
+                        () => ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
                           ),
+                          onPressed: authController.isLoading.value
+                              ? null
+                              : () {
+                                  if (confirmPassword.text ==
+                                      newPassword.text) {
+                                    authController.changePasswordController(
+                                        newPassword: newPassword.text,
+                                        currentPassword: currentPassword.text);
+                                  } else {
+                                    utilsServices.showToast(
+                                      message: 'Senhas não equivalentes',
+                                      isError: true,
+                                    );
+                                  }
+                                },
+                          child: authController.isLoading.value
+                              ? const CircularProgressIndicator()
+                              : const Text(
+                                  'Atualizar',
+                                  style: TextStyle(fontSize: 18.0),
+                                ),
                         ),
-                        onPressed: () {},
-                        child: const Text('Atualizar',
-                            style: TextStyle(fontSize: 18.0)),
                       ),
                     ),
                   ],
