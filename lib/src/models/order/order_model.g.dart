@@ -13,9 +13,9 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       copyAndPaste: json['copiaecola'] as String,
       overdueDateTime: DateTime.parse(json['due'] as String),
       status: json['status'] as String,
-      createdDateTime: json['createdDateTime'] == null
+      createdDateTime: json['createdAt'] == null
           ? null
-          : DateTime.parse(json['createdDateTime'] as String),
+          : DateTime.parse(json['createdAt'] as String),
       items: (json['items'] as List<dynamic>?)
               ?.map((e) => CartItemModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -30,6 +30,6 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'copiaecola': instance.copyAndPaste,
       'due': instance.overdueDateTime.toIso8601String(),
       'status': instance.status,
-      'createdDateTime': instance.createdDateTime?.toIso8601String(),
+      'createdAt': instance.createdDateTime?.toIso8601String(),
       'items': instance.items,
     };
