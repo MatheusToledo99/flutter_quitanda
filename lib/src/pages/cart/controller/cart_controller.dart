@@ -59,8 +59,7 @@ class CartController extends GetxController {
   }
 
 //Enviar para o repositório o item a ser adiocionado
-  Future<void> addItemToCartController(
-      {int quantity = 1, required ItemModel item}) async {
+  Future addItemToCartCrtl({int quantity = 1, required ItemModel item}) async {
     int indexItem = getIndexIdController(item);
 
     if (indexItem == -1) {
