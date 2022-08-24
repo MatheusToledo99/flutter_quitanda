@@ -81,7 +81,7 @@ class ItemTile extends StatelessWidget {
           right: 4,
           child: GestureDetector(
             onTap: () {
-              cartController.addItemToCartController(item: item);
+              cartController.addItemToCartCrtl(item: item);
             },
             child: Container(
               height: 35,
