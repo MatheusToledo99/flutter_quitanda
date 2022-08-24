@@ -120,7 +120,7 @@ class ProductScreen extends StatelessWidget {
                             Get.back();
 
                             //Injeção de dependência, chamando o metodo para adicionar item
-                            cartController.addItemToCartController(item: item);
+                            cartController.addItemToCartCrtl(item: item);
 
                             //Ir para a Tab do carrinho.
                             //Neste caso não usamos o Get.offNamed pois não é uma nova tela, e sim uma TAB.
