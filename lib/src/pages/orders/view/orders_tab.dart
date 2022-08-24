@@ -1,7 +1,8 @@
 // ignore_for_file: library_prefixes
 
 import 'package:flutter/material.dart';
-import 'package:quitanda/src/config/app_data.dart' as appData;
+import 'package:get/get.dart';
+import 'package:quitanda/src/pages/orders/controller/orders_controller.dart';
 import 'package:quitanda/src/pages/orders/view/components/order_tile.dart';
 
 class OrdersTab extends StatelessWidget {
@@ -13,11 +14,15 @@ class OrdersTab extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Pedidos'),
       ),
-      body: ListView.separated(
-        itemCount: appData.orders.length,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) =>
-            OrderTile(order: appData.orders[index]),
+      body: GetBuilder<OrdersController>(
+        builder: (controller) {
+          return ListView.separated(
+            itemCount: controller.allOrders.length,
+            separatorBuilder: (context, index) => const Divider(),
+            itemBuilder: (context, index) =>
+                OrderTile(order: controller.allOrders[index]),
+          );
+        },
       ),
     );
   }
