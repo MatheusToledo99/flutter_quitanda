@@ -9,11 +9,16 @@ import 'package:quitanda/src/pages/home/view/home_tab.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 // ignore: must_be_immutable
-class ProductScreen extends StatelessWidget {
-  ProductScreen({
+class ProductScreen extends StatefulWidget {
+  const ProductScreen({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
   final ItemModel item = Get.arguments;
 
   final cartController = Get.find<CartController>();
@@ -68,14 +73,15 @@ class ProductScreen extends StatelessWidget {
                                   fontSize: 30, fontWeight: FontWeight.bold),
                             ),
                           ),
+
                           //Quantidade do produto
                           QuantityWidget(
                               suffixText: item.unit,
                               value: cartItemQuantity,
                               result: (quantity) {
-                                // setState(() {
-                                //   cartItemQuantity = quantity;
-                                // });
+                                setState(() {
+                                  cartItemQuantity = quantity;
+                                });
                               }),
                         ],
                       ),
@@ -120,7 +126,8 @@ class ProductScreen extends StatelessWidget {
                             Get.back();
 
                             //Injeção de dependência, chamando o metodo para adicionar item
-                            cartController.addItemToCartCrtl(item: item);
+                            cartController.addItemToCartCrtl(
+                                item: item, quantity: cartItemQuantity);
 
                             //Ir para a Tab do carrinho.
                             //Neste caso não usamos o Get.offNamed pois não é uma nova tela, e sim uma TAB.

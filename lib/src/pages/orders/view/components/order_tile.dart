@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda/src/models/cart/cart_item_model.dart';
 import 'package:quitanda/src/models/order/order_model.dart';
 import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
+import 'package:quitanda/src/pages/orders/controller/orders_controller.dart';
 import 'package:quitanda/src/pages/orders/view/components/order_status_widget.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
@@ -20,7 +22,6 @@ class OrderTile extends StatelessWidget {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-          initiallyExpanded: order.status == 'pending_payment',
           title: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,19 +42,36 @@ class OrderTile extends StatelessWidget {
               children: [
                 //
                 //Lista de produtos
-                Expanded(
-                  flex: 3,
-                  child: SizedBox(
-                    height: 150,
-                    child: ListView(
-                      children: order.items.map((orderItem) {
-                        return _OrderItemWidget(
-                          utilsServices: utilsServices,
-                          orderItem: orderItem,
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                GetBuilder<OrdersController>(
+                  builder: (controller) {
+                    if (order.items.isEmpty) {
+                      controller.getItemsOnOrdersController(order: order);
+                    }
+                    return controller.isLoading
+                        ? const Expanded(
+                            flex: 3,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 85),
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        : Expanded(
+                            flex: 3,
+                            child: SizedBox(
+                              height: 150,
+                              child: ListView(
+                                children: order.items.map(
+                                  (orderItem) {
+                                    return _OrderItemWidget(
+                                      utilsServices: utilsServices,
+                                      orderItem: orderItem,
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          );
+                  },
                 ),
 
                 //Divisão Vertical
@@ -135,10 +153,8 @@ class _OrderItemWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Row(
         children: [
-          Text(
-            '${orderItem.quantity} ${orderItem.item.unit}  ',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Text('${orderItem.quantity} ${orderItem.item.unit}  ',
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           Expanded(child: Text(orderItem.item.itemName)),
           Text(utilsServices.priceToCurrency(orderItem.totalPrice())),
         ],

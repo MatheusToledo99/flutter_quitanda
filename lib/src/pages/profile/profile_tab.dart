@@ -7,14 +7,8 @@ import 'package:quitanda/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda/src/services/util_services.dart';
 import 'package:quitanda/src/services/validators.dart';
 
-class ProfileTab extends StatefulWidget {
-  const ProfileTab({Key? key}) : super(key: key);
-
-  @override
-  State<ProfileTab> createState() => _ProfileTabState();
-}
-
-class _ProfileTabState extends State<ProfileTab> {
+class ProfileTab extends StatelessWidget {
+  ProfileTab({Key? key}) : super(key: key);
   final authController = Get.find<AuthController>();
 
   @override
@@ -73,7 +67,7 @@ class _ProfileTabState extends State<ProfileTab> {
                 ),
               ),
               onPressed: () async {
-                await updatePassword();
+                await updatePassword(context);
               },
               child: const Text(
                 'Atualizar senha',
@@ -87,7 +81,7 @@ class _ProfileTabState extends State<ProfileTab> {
   }
 
   //Função para Atualizar Senha
-  Future<bool?> updatePassword() {
+  Future<bool?> updatePassword(BuildContext context) {
     final TextEditingController newPassword = TextEditingController();
     final TextEditingController confirmPassword = TextEditingController();
     final TextEditingController currentPassword = TextEditingController();

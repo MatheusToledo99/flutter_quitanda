@@ -3,12 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'user_model.g.dart';
 
+//Classe para serealizar o Json, gerando um arquivo, devo apenas citar os métodos toJson e fromJson
+//através do retorno de uma factory e um Map<string dynamic>
+
 @JsonSerializable()
 class UserModel {
-  // converter o o nome do atrbuto name para fullnameno back-end.
   @JsonKey(name: 'fullname')
   String? name;
-  //
+
   String? id;
   String? token;
   String? email;
@@ -26,9 +28,11 @@ class UserModel {
     this.password,
   });
 
+// Método para converter Map<String, dynamic> para Json
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
+// Método para converter Json para Map<String, dynamic>
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   @override

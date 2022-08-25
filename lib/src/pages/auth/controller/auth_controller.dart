@@ -8,12 +8,26 @@ import 'package:quitanda/src/pages_routes/app_pages.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class AuthController extends GetxController {
-  RxBool isLoading = false.obs;
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- VARIÁVEIS -------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
 
+  RxBool isLoading = false.obs;
   final authRepository = AuthRepository();
   final utilsServices = UtilsServices();
   UserModel user = UserModel();
 
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- MÉTODOS ---------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
   Future<void> signInController(
       {required String email, required String password}) async {
     isLoading.value = true;
@@ -57,10 +71,8 @@ class AuthController extends GetxController {
     Get.offAllNamed(PagesRoutes.signInRoute);
   }
 
-  Future<void> changePasswordController({
-    required String newPassword,
-    required String currentPassword,
-  }) async {
+  Future<void> changePasswordController(
+      {required String newPassword, required String currentPassword}) async {
     isLoading.value = true;
 
     final result = await authRepository.changePassword(

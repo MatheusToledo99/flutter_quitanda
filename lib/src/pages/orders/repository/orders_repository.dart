@@ -26,7 +26,7 @@ class OrdersRepository {
           List<Map<String, dynamic>>.from(result['result'])
               .map(OrderModel.fromJson)
               .toList();
-      return OrdersResult.success(data);
+      return OrdersResult<List<OrderModel>>.success(data);
     } else {
       return OrdersResult.error('Erro ao recuperar os dados');
     }
@@ -50,7 +50,7 @@ class OrdersRepository {
           List<Map<String, dynamic>>.from(result['result'])
               .map(CartItemModel.fromJson)
               .toList();
-      return OrdersResult.success(data);
+      return OrdersResult<List<CartItemModel>>.success(data);
     } else {
       return OrdersResult.error('Erro ao recuperar os produtos do pedido');
     }

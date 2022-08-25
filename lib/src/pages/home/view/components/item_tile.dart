@@ -35,6 +35,7 @@ class ItemTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  //
                   //Imagem
                   Expanded(
                     child: Image.network(item.imgUrl),

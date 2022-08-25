@@ -27,6 +27,7 @@ class HttpManager {
         'X-Parse-REST-API-Key': 'rFBKU8tk0m5ZlKES2CGieOaoYz6TgKxVMv8jRIsN',
       });
 
+    //Plugin para otmizar os requisições HTTP
     Dio dio = Dio();
 
     try {

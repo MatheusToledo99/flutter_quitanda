@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+//Serviço para validar os campos de texto para Login e Cadastro
+
 String? emailValidator(String? email) {
   if (email == null || email.isEmpty) {
     return 'Digite seu email!';

@@ -3,17 +3,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'item_model.g.dart';
 
+//Classe para serealizar o Json, gerando um arquivo, devo apenas citar os métodos toJson e fromJson
+//através do retorno de uma factory e um Map<string dynamic>
+
 @JsonSerializable()
 class ItemModel {
   String id;
 
-  //No back-end o itemName é title
   @JsonKey(name: 'title')
-  //
   String itemName;
-  //No back-end o imgUrl é picture
+
   @JsonKey(name: 'picture')
   String imgUrl;
+
   String unit;
   double price;
   String description;
@@ -27,9 +29,11 @@ class ItemModel {
     required this.description,
   });
 
+// Método para converter Map<String, dynamic> para Json
   factory ItemModel.fromJson(Map<String, dynamic> json) =>
       _$ItemModelFromJson(json);
 
+// Método para converter Json para Map<String, dynamic>
   Map<String, dynamic> toJson() => _$ItemModelToJson(this);
 
   @override

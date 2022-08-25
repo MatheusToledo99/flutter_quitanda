@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:quitanda/src/config/custom_colors.dart';
 import 'package:quitanda/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda/src/pages/cart/view/components/cart_tile.dart';
+import 'package:quitanda/src/pages/orders/controller/orders_controller.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class CartTab extends StatelessWidget {
   CartTab({Key? key}) : super(key: key);
-
+  final orderController = Get.find<OrdersController>();
   final UtilsServices utilsservices = UtilsServices();
   final cartController = Get.find<CartController>();
 
@@ -77,6 +78,7 @@ class CartTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                //
                 //Total Geral
                 const Text('Total Geral'),
 
@@ -155,6 +157,7 @@ class CartTab extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                orderController.getAllOrdersController();
                 Navigator.of(context).pop(true);
               },
               child: const Text('Sim'),

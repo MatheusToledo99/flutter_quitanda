@@ -6,14 +6,31 @@ import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages/cart/repository/cart_repository.dart';
 import 'package:quitanda/src/pages/cart/result/cart_result.dart';
 import 'package:quitanda/src/pages/common_widgets/payment_dialog.dart';
+import 'package:quitanda/src/pages/orders/controller/orders_controller.dart';
 import 'package:quitanda/src/services/util_services.dart';
 
 class CartController extends GetxController {
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- VARIÁVEIS -------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+
   final cartRepository = CartRepository();
   final authController = Get.find<AuthController>();
   List<CartItemModel> cartItems = [];
   bool isLoading = false;
   final utilsServices = UtilsServices();
+
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- MÉTODOS ---------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
 
 //Método para quando iniciar, chamar o getCartItemsController
   @override
@@ -88,7 +105,7 @@ class CartController extends GetxController {
     } else {
       //O elemento já existe
       await modifyQuantityCartItemsController(
-          item: cartItems[indexItem],
+          cartItem: cartItems[indexItem],
           quantity: cartItems[indexItem].quantity + quantity);
       utilsServices.showToast(message: 'Produto adicionado com sucesso!');
     }
@@ -97,18 +114,18 @@ class CartController extends GetxController {
 
 //Enviar para o repositório a quantidade do item a ser adionado ou removido
   Future<bool> modifyQuantityCartItemsController(
-      {required CartItemModel item, required int quantity}) async {
+      {required CartItemModel cartItem, required int quantity}) async {
     final result = await cartRepository.modifyQuantityCartItems(
       token: authController.user.token!,
-      cartItemId: item.id,
+      cartItemId: cartItem.id,
       quantitity: quantity,
     );
 
     if (result == true) {
       if (quantity == 0) {
-        cartItems.removeWhere((element) => element.id == item.id);
+        cartItems.removeWhere((element) => element.id == cartItem.id);
       } else {
-        cartItems.firstWhere((element) => element.id == item.id).quantity =
+        cartItems.firstWhere((element) => element.id == cartItem.id).quantity =
             quantity;
       }
     } else {
@@ -122,6 +139,7 @@ class CartController extends GetxController {
     return result;
   }
 
+  //Finaliza a compra do carrinho e gera o pedido
   Future<void> chekoutController() async {
     isLoading = true;
     update();
@@ -137,6 +155,8 @@ class CartController extends GetxController {
     result.when(
       success: (data) {
         cartItems.clear();
+        final orderController = Get.find<OrdersController>();
+        orderController.getAllOrdersController();
 
         showDialog(
           context: Get.context!,

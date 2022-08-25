@@ -42,7 +42,7 @@ class CartTile extends StatelessWidget {
           value: cartItem.quantity,
           result: (quantity) {
             cartController.modifyQuantityCartItemsController(
-              item: cartItem,
+              cartItem: cartItem,
               quantity: quantity,
             );
           },

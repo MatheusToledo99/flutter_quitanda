@@ -17,8 +17,17 @@ abstract class AppPages {
     //Rota para a SignUp
     GetPage(name: PagesRoutes.signUpRoute, page: () => SignUpScreen()),
 
-    //Rota para a base, neste momento eu injeto através do HomeBinding a injeção de depedência do HomeController
-    //e da NavigationController através da NavigationBinding.
+    //
+
+    // Quando nevegar para a base, tem-se a injeção de dependência
+
+    // ********Injeções de dependência********
+
+    // HomeBinding -------------> HomeController
+    // NavigationBinding -------> NavigationController
+    // CartBinding -------------> CarController
+    // OrdersBinding -----------> OrdersController
+
     GetPage(
       name: PagesRoutes.baseRoute,
       page: () => BaseScreen(),
@@ -31,7 +40,7 @@ abstract class AppPages {
     ),
 
     //Rota para a tela de produto detalhado
-    GetPage(name: PagesRoutes.productRoute, page: () => ProductScreen())
+    GetPage(name: PagesRoutes.productRoute, page: () => const ProductScreen())
   ];
 }
 

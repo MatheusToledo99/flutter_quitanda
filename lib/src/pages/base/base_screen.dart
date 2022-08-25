@@ -22,7 +22,7 @@ class BaseScreen extends StatelessWidget {
           HomeTab(),
           CartTab(),
           const OrdersTab(),
-          const ProfileTab(),
+          ProfileTab(),
         ],
       ),
       bottomNavigationBar: Obx(

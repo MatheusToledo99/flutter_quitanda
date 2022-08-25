@@ -9,17 +9,36 @@ abstract class NavigationTabs {
 }
 
 class NavigationController extends GetxController {
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- VARIÁVEIS -------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+
   late PageController _pageController;
   late RxInt _currentIndex;
 
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+  //--------------------------------- MÉTODOS ---------------------------------//
+  //                                                                           //
+  //                                                                           //
+  //                                                                           //
+
+  //Pegar a controller da página
   PageController get pageController {
     return _pageController;
   }
 
+  //Pegar o índice atual da página
   int get currentIndex {
     return _currentIndex.value;
   }
 
+  //Quando iniciar, chamar a tab Home
   @override
   void onInit() {
     super.onInit();
@@ -29,6 +48,7 @@ class NavigationController extends GetxController {
         currentIndex: NavigationTabs.home);
   }
 
+  //Iniciar navegação, setando página e o indíce para permitar a navegação
   void initNavigation({
     required PageController pageController,
     required int currentIndex,
@@ -37,6 +57,7 @@ class NavigationController extends GetxController {
     _currentIndex = currentIndex.obs;
   }
 
+  //navegando entre as páginas
   void navigatePageView(int page) {
     if (_currentIndex.value == page) return;
 

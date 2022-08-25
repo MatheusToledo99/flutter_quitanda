@@ -5,6 +5,9 @@ import 'package:quitanda/src/models/cart/cart_item_model.dart';
 
 part 'order_model.g.dart';
 
+//Classe para serealizar o Json, gerando um arquivo, devo apenas citar os métodos toJson e fromJson
+//através do retorno de uma factory e um Map<string dynamic>
+
 @JsonSerializable()
 class OrderModel {
   String id;
@@ -37,9 +40,11 @@ class OrderModel {
     required this.items,
   });
 
+// Método para converter Map<String, dynamic> para Json
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
 
+// Método para converter Json para Map<String, dynamic>
   Map<String, dynamic> toJson() => _$OrderModelToJson(this);
 
   @override
