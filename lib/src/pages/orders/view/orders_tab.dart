@@ -16,12 +16,35 @@ class OrdersTab extends StatelessWidget {
       ),
       body: GetBuilder<OrdersController>(
         builder: (controller) {
-          return ListView.separated(
-            itemCount: controller.allOrders.length,
-            separatorBuilder: (context, index) => const Divider(),
-            itemBuilder: (context, index) =>
-                OrderTile(order: controller.allOrders[index]),
-          );
+          return controller.allOrders.isNotEmpty
+              ? ListView.separated(
+                  itemCount: controller.allOrders.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) =>
+                      OrderTile(order: controller.allOrders[index]),
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'Não há pedidos na sua conta ainda!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                        child: Icon(
+                          Icons.sentiment_dissatisfied_rounded,
+                          color: Colors.red,
+                          size: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
         },
       ),
     );
