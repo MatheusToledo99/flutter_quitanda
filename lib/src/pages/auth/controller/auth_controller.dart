@@ -28,6 +28,14 @@ class AuthController extends GetxController {
   //                                                                           //
   //                                                                           //
   //                                                                           //
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    validateTokenController();
+  }
+
   Future<void> signInController(
       {required String email, required String password}) async {
     isLoading.value = true;
@@ -40,6 +48,9 @@ class AuthController extends GetxController {
     result.when(success: (user) {
       utilsServices.showToast(message: 'Login efetuado com sucesso!');
       this.user = user;
+
+      //Salvar o token e depois que navegamos a tela base
+      utilsServices.saveLocalData(key: 'token', value: user.token!);
       Get.offAllNamed(PagesRoutes.baseRoute);
     }, error: (message) {
       utilsServices.showToast(message: message, isError: true);
@@ -66,8 +77,9 @@ class AuthController extends GetxController {
     await authRepository.resetPassword(email);
   }
 
-  void signOut() {
+  Future<void> signOut() async {
     user = UserModel();
+    await utilsServices.deleteAllLocalData();
     Get.offAllNamed(PagesRoutes.signInRoute);
   }
 
@@ -90,6 +102,27 @@ class AuthController extends GetxController {
       signOut();
     } else {
       utilsServices.showToast(message: 'Sua Senha Atual está errada');
+    }
+  }
+
+  Future<void> validateTokenController() async {
+    String? token = await utilsServices.getLocalData(key: 'token');
+
+    if (token == null) {
+      Get.offAllNamed(PagesRoutes.signInRoute);
+    } else {
+      final AuthResult result = await authRepository.validateToken(token);
+
+      result.when(
+        success: (user) {
+          this.user = user;
+          utilsServices.saveLocalData(key: 'token', value: user.token!);
+          Get.offAllNamed(PagesRoutes.baseRoute);
+        },
+        error: (message) {
+          utilsServices.showToast(message: message, isError: true);
+        },
+      );
     }
   }
 }

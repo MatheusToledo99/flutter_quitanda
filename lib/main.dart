@@ -4,6 +4,8 @@ import 'package:quitanda/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda/src/pages_routes/app_pages.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   //
   //Injeção de dependência - Coloca a instância da classe AuthController na memória do celular.
   Get.put(AuthController());

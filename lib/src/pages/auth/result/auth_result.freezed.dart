@@ -19,19 +19,19 @@ mixin _$AuthResult {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user) success,
-    required TResult Function(String mensage) error,
+    required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -135,7 +135,7 @@ class _$Success implements Success {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user) success,
-    required TResult Function(String mensage) error,
+    required TResult Function(String message) error,
   }) {
     return success(user);
   }
@@ -144,7 +144,7 @@ class _$Success implements Success {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
   }) {
     return success?.call(user);
   }
@@ -153,7 +153,7 @@ class _$Success implements Success {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -207,7 +207,7 @@ abstract class Success implements AuthResult {
 abstract class _$$ErrorCopyWith<$Res> {
   factory _$$ErrorCopyWith(_$Error value, $Res Function(_$Error) then) =
       __$$ErrorCopyWithImpl<$Res>;
-  $Res call({String mensage});
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -221,12 +221,12 @@ class __$$ErrorCopyWithImpl<$Res> extends _$AuthResultCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? mensage = freezed,
+    Object? message = freezed,
   }) {
     return _then(_$Error(
-      mensage == freezed
-          ? _value.mensage
-          : mensage // ignore: cast_nullable_to_non_nullable
+      message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -235,14 +235,14 @@ class __$$ErrorCopyWithImpl<$Res> extends _$AuthResultCopyWithImpl<$Res>
 /// @nodoc
 
 class _$Error implements Error {
-  _$Error(this.mensage);
+  _$Error(this.message);
 
   @override
-  final String mensage;
+  final String message;
 
   @override
   String toString() {
-    return 'AuthResult.error(mensage: $mensage)';
+    return 'AuthResult.error(message: $message)';
   }
 
   @override
@@ -250,12 +250,12 @@ class _$Error implements Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$Error &&
-            const DeepCollectionEquality().equals(other.mensage, mensage));
+            const DeepCollectionEquality().equals(other.message, message));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(mensage));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
 
   @JsonKey(ignore: true)
   @override
@@ -266,29 +266,29 @@ class _$Error implements Error {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user) success,
-    required TResult Function(String mensage) error,
+    required TResult Function(String message) error,
   }) {
-    return error(mensage);
+    return error(message);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
   }) {
-    return error?.call(mensage);
+    return error?.call(message);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user)? success,
-    TResult Function(String mensage)? error,
+    TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(mensage);
+      return error(message);
     }
     return orElse();
   }
@@ -326,9 +326,9 @@ class _$Error implements Error {
 }
 
 abstract class Error implements AuthResult {
-  factory Error(final String mensage) = _$Error;
+  factory Error(final String message) = _$Error;
 
-  String get mensage;
+  String get message;
   @JsonKey(ignore: true)
   _$$ErrorCopyWith<_$Error> get copyWith => throw _privateConstructorUsedError;
 }

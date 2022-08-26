@@ -12,7 +12,6 @@ class AuthRepository {
   final HttpManager _httpManager = HttpManager();
 
   //Método para Logar
-
   Future<AuthResult> signIn({
     required String email,
     required String password,
@@ -34,6 +33,7 @@ class AuthRepository {
     }
   }
 
+  //Método para Cadastro
   Future<AuthResult> signUp(UserModel user) async {
     final result = await _httpManager.restRequest(
       url: Endpoints.signup,
@@ -49,6 +49,7 @@ class AuthRepository {
     }
   }
 
+  //Método para recuperar a senha enviada no email
   Future<void> resetPassword(String email) async {
     await _httpManager.restRequest(
         url: Endpoints.resetPassword,
@@ -56,6 +57,7 @@ class AuthRepository {
         body: {"email": email});
   }
 
+  //Método para alterar a senha dentro da própria aplicação
   Future<bool> changePassword({
     required String email,
     required String currentPassword,
@@ -77,7 +79,46 @@ class AuthRepository {
 
     return result['error'] == null;
   }
+
+  Future<AuthResult> validateToken(String token) async {
+    final result = await _httpManager.restRequest(
+        url: Endpoints.validateToken,
+        method: HttpMethods.post,
+        headers: {
+          'X-Parse-Session-Token': token,
+        });
+    if (result['result'] != null) {
+      final user = UserModel.fromJson(result['result']);
+      return AuthResult.success(user);
+    } else {
+      return AuthResult.error(authErrors.authErrorsString(result['result']));
+    }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
